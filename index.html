@@ -4,164 +4,70 @@
   <meta charset="utf-8" />
   <title>HiLabs — HiView Dashboard (Jenifer Hayes)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Bootstrap CSS (stable CDN) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
+    :root{
+      --hi-blue:#2c6aef;
+      --hi-bg:#f8f9fa;
+      --panel-bg:#ffffff;
+      --muted:#6b7280;
+      --accent:#2c6aef;
+    }
+    html,body { height:100%; }
     body { 
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
-      background: #f8f9fa; 
-      color: #000000; 
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--hi-bg); color: #0b1220; margin:0; padding:0;
     }
+    .container-fluid { padding:18px; max-width:1400px; margin:auto; }
+    /* Header */
     .header { 
-      padding: 18px 24px; 
-      background: #2c6aef; 
-      color: #ffffff;
-      border-radius: 8px; 
-      margin-bottom: 16px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      box-shadow: 0 2px 8px rgba(44, 106, 239, 0.2); 
+      padding: 18px 22px; background: var(--hi-blue); color: #fff;
+      border-radius:10px; margin-bottom: 18px; display:flex; align-items:center; justify-content:space-between;
+      box-shadow:0 6px 18px rgba(44,106,239,0.12);
     }
-    .header h4 { 
-      margin: 0; 
-      color: #ffffff; 
-      font-weight: 600; 
+    .header h4{ margin:0; font-weight:700; font-size:20px; }
+    .header-subtitle{ font-size:13px; color: rgba(255,255,255,0.9); margin-top:6px; }
+    .kpi { background:var(--panel-bg); border-radius:10px; padding:10px 12px; min-width:150px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.06); border-left:4px solid var(--accent); }
+    .tile-title { font-size:12px; color:var(--muted); font-weight:600; }
+    .tile-value { font-weight:700; font-size:18px; margin-top:4px; }
+    /* Panels */
+    .panel { background:var(--panel-bg); padding:14px; border-radius:10px; box-shadow:0 4px 10px rgba(2,6,23,0.04); border-left:4px solid var(--accent); }
+    .panel h6 { margin-top:0; font-weight:700; font-size:16px; border-bottom:2px solid var(--accent); padding-bottom:8px; margin-bottom:12px; }
+    .small-muted{ color:var(--muted); font-size:13px; }
+    /* map + legend */
+    #map { height:360px; border-radius:8px; border:1px solid #e6edf8; position:relative; }
+    .map-legend{ position:absolute; right:14px; top:14px; z-index:999; background:rgba(255,255,255,0.98); padding:8px 10px; border-radius:8px; box-shadow:0 6px 18px rgba(2,6,23,0.06); border-left:4px solid var(--accent); font-size:13px; }
+    .legend-row{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .legend-swatch{ width:14px; height:14px; border-radius:3px; display:inline-block; border:1px solid #ddd; }
+    /* layout control: equal height middle columns */
+    .panel-eq { min-height: 280px; display:flex; flex-direction:column; }
+    /* tables */
+    .scroll-table { max-height:210px; overflow:auto; padding-right:6px; }
+    .table thead th { background:var(--accent); color:#fff; position:sticky; top:0; z-index:2; font-weight:700; font-size:12px; }
+    .table-sm td { font-size:13px; color:#081827; }
+    /* quality plot */
+    #quality-plot { height:260px; width:100%; }
+    /* scenario layout */
+    .scenario-box { border-left:4px solid var(--accent); padding:16px; border-radius:10px; }
+    .scenario-controls { min-width:260px; }
+    .scenario-results { flex:1; max-height:240px; overflow:auto; padding-left:12px; }
+    .rationale-box { margin-top:10px; padding:10px; border-radius:8px; background:#f3f4f6; font-size:13px; color:#0b1220; }
+    /* footer */
+    .footer{ text-align:center; color:var(--muted); margin-top:14px; font-size:13px; }
+    /* responsive tweaks */
+    @media (max-width: 1100px){
+      .header{ flex-direction:column; align-items:flex-start; gap:12px; }
+      .kpi { min-width:120px; font-size:13px; padding:8px; }
+      #map{ height:300px; }
+      .panel-eq { min-height:220px; }
+      #quality-plot { height:220px; }
+      .scenario-results { max-height:200px; }
     }
-    .header-subtitle { 
-      font-size: 13px; 
-      color: rgba(255, 255, 255, 0.85); 
-      margin-top: 4px;
-    }
-    .kpi { 
-      background: #ffffff; 
-      border-radius: 8px; 
-      padding: 12px; 
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); 
-      margin-left: 10px; 
-      min-width: 150px; 
-      text-align: center; 
-      border-left: 3px solid #2c6aef;
-    }
-    .tile-title { 
-      font-size: 12px; 
-      color: #6b7280; 
-      font-weight: 500;
-    }
-    .tile-value { 
-      font-weight: 700; 
-      font-size: 20px; 
-      color: #000000;
-      margin: 4px 0;
-    }
-    #map { 
-      height: 360px; 
-      border-radius: 8px; 
-      border: 2px solid #e5e7eb;
-      position:relative;
-    }
-    .panel { 
-      background: white; 
-      padding: 16px; 
-      border-radius: 8px; 
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); 
-      border-left: 3px solid #2c6aef;
-    }
-    .panel h6 {
-      color: #000000;
-      font-weight: 600;
-      margin-bottom: 12px;
-      border-bottom: 2px solid #2c6aef;
-      padding-bottom: 8px;
-    }
-    .small-muted { 
-      color: #6b7280; 
-      font-size: 12px; 
-    }
-    .alert-card { 
-      margin-bottom: 10px; 
-      font-size: 13px;
-    }
-    .scenario-box { 
-      background: #fff; 
-      padding: 18px; 
-      border-radius: 8px; 
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); 
-      border-left: 4px solid #2c6aef;
-    }
-    .scenario-box h6 {
-      color: #000000;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .footer { 
-      font-size: 13px; 
-      color: #6b7280; 
-      margin-top: 16px; 
-    }
-    .table thead th {
-      background-color: #2c6aef;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 12px;
-      border: none;
-    }
-    .table-sm td {
-      font-size: 13px;
-      color: #000000;
-    }
-    .progress-bar {
-      background-color: #2c6aef !important;
-    }
-    .btn-primary {
-      background-color: #2c6aef;
-      border-color: #2c6aef;
-    }
-    .btn-primary:hover {
-      background-color: #1e54d1;
-      border-color: #1e54d1;
-    }
-    .form-range::-webkit-slider-thumb {
-      background: #2c6aef;
-    }
-    .form-range::-moz-range-thumb {
-      background: #2c6aef;
-    }
-    .form-select:focus {
-      border-color: #2c6aef;
-      box-shadow: 0 0 0 0.2rem rgba(44, 106, 239, 0.25);
-    }
-    .dropdown-label {
-      font-weight: 600;
-      color: #000000;
-      font-size: 13px;
-      margin-bottom: 4px;
-      margin-top: 8px;
-      display: block;
-    }
-    /* Legend box on map */
-    .map-legend {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-      background: rgba(255,255,255,0.95);
-      padding: 8px 10px;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      font-size: 13px;
-      z-index: 999;
-      border-left: 4px solid #2c6aef;
-    }
-    .legend-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-    .legend-swatch { width:14px; height:14px; border-radius:3px; display:inline-block; border:1px solid #ccc; }
-    .rationale-box { margin-top:10px; padding:8px; border-radius:6px; background:#f3f4f6; font-size:13px; color:#111827; }
   </style>
 </head>
 <body>
-  <div class="container-fluid p-3">
-    <!-- Header -->
+  <div class="container-fluid">
     <div class="header">
       <div>
         <h4>HiLabs | Risk & Rate Intelligence Platform</h4>
@@ -175,15 +81,13 @@
       </div>
     </div>
 
-    <!-- Top row -->
-    <div class="row g-3">
+    <!-- top row -->
+    <div class="row g-3 align-items-start">
       <div class="col-lg-3">
-        <div class="panel">
+        <div class="panel panel-eq">
           <h6>Network Snapshot</h6>
-          
-          <!-- Network Name Dropdown -->
-          <label class="dropdown-label">Network Name</label>
-          <select id="network-name" class="form-select form-select-sm">
+          <label class="small-muted" style="font-weight:700">Network Name</label>
+          <select id="network-name" class="form-select form-select-sm mb-2">
             <option value="Great Plains Care Connect">Great Plains Care Connect</option>
             <option value="PacificCare Integrated Health">PacificCare Integrated Health Network</option>
             <option value="Midwest Regional Medical">Midwest Regional Medical Alliance</option>
@@ -194,21 +98,19 @@
             <option value="Rocky Mountain Health">Rocky Mountain Health Collaborative</option>
           </select>
 
-          <!-- Network Type Dropdown -->
-          <label class="dropdown-label">Network Type</label>
-          <select id="network-type" class="form-select form-select-sm">
-            <option value="Type-1">Type-1: Primary Care Network</option>
-            <option value="Type-2">Type-2: Specialty Care Network</option>
-            <option value="Type-3">Type-3: Behavioral Health Network</option>
-            <option value="Type-4">Type-4: Dental/Vision Network</option>
-            <option value="Type-5" selected>Type-5: Multi-Specialty Network</option>
-            <option value="Type-6">Type-6: Accountable Care Organization (ACO)</option>
-            <option value="Type-7">Type-7: Managed Care Network (HMO/PPO)</option>
+          <label class="small-muted" style="font-weight:700">Network Type</label>
+          <select id="network-type" class="form-select form-select-sm mb-2">
+            <option>Type-1: Primary Care Network</option>
+            <option>Type-2: Specialty Care Network</option>
+            <option>Type-3: Behavioral Health Network</option>
+            <option>Type-4: Dental/Vision Network</option>
+            <option selected>Type-5: Multi-Specialty Network</option>
+            <option>Type-6: Accountable Care Organization (ACO)</option>
+            <option>Type-7: Managed Care Network (HMO/PPO)</option>
           </select>
 
-          <!-- Coverage Area Dropdown -->
-          <label class="dropdown-label">Coverage Area</label>
-          <select id="coverage-area" class="form-select form-select-sm">
+          <label class="small-muted" style="font-weight:700">Coverage Area</label>
+          <select id="coverage-area" class="form-select form-select-sm mb-3">
             <option value="Southwest" selected>Southwest Corridor – AZ, NM, NV</option>
             <option value="New England">New England Region – MA, CT, RI, NH</option>
             <option value="Pacific Northwest">Pacific Northwest – WA, OR, Northern CA</option>
@@ -219,70 +121,72 @@
 
           <hr>
           <div><strong>Providers:</strong> <span id="provider-count">850</span></div>
-          <div style="margin-top:6px"><strong>Savings Opp:</strong> <span id="savings-opp">15 contracts (~$12.3M)</span></div>
-          <div style="margin-top:6px"><strong>Rate Score:</strong> <span id="rate-score">7.2 / 10</span></div>
-          <div style="margin-top:6px"><strong>Adequacy:</strong> <span id="adequacy">92%</span></div>
+          <div style="margin-top:8px"><strong>Savings Opp:</strong> <span id="savings-opp">15 contracts (~$12.3M)</span></div>
+          <div style="margin-top:8px"><strong>Rate Score:</strong> <span id="rate-score">7.2 / 10</span></div>
+          <div style="margin-top:8px"><strong>Adequacy:</strong> <span id="adequacy">92%</span></div>
+          <div style="margin-top:auto; font-size:13px; color:var(--muted); margin-top:12px;">Tip: change network name to load different synthetic metrics and map region.</div>
         </div>
       </div>
 
       <div class="col-lg-6">
-        <div class="panel mb-3">
+        <div class="panel">
           <h6>Key Metrics</h6>
           <div class="row">
             <div class="col-4">
-              <div class="tile-title">Total Network Spend</div>
-              <div style="font-weight:700; color:#000000" id="total-spend">$245,000,000</div>
+              <div class="small-muted">Total Network Spend</div>
+              <div style="font-weight:700; font-size:18px" id="total-spend">$245,000,000</div>
               <div class="small-muted">Trend: Down 3% YoY</div>
             </div>
             <div class="col-4">
-              <div class="tile-title">Cost Leakage</div>
-              <div style="font-weight:700; color:#000000" id="cost-leakage">$12,300,000</div>
-              <div class="small-muted">From rate benchmarking</div>
+              <div class="small-muted">Cost Leakage</div>
+              <div style="font-weight:700; font-size:18px" id="cost-leakage">$12,300,000</div>
+              <div class="small-muted">Source: Rate benchmarking</div>
             </div>
             <div class="col-4">
-              <div class="tile-title">Market Position</div>
-              <div style="font-weight:700; color:#000000" id="market-position">+6.2% above median</div>
+              <div class="small-muted">Market Position</div>
+              <div style="font-weight:700; font-size:18px" id="market-position">+6.2% above median</div>
               <div class="small-muted">Overpay +6.2%</div>
             </div>
           </div>
         </div>
 
-        <div id="map" class="panel">
-          <!-- Legend box (fixed) -->
-          <div class="map-legend" id="map-legend">
-            <div style="font-weight:600; margin-bottom:6px;">Map Legend (Overpayment vs Market)</div>
+        <div class="panel" style="padding:0 12px 12px 12px;">
+          <div id="map" style="border-radius:8px; overflow:hidden;"></div>
+          <div class="map-legend">
+            <div style="font-weight:700; margin-bottom:6px;">Map Legend (Overpayment vs Market)</div>
             <div class="legend-row"><span class="legend-swatch" style="background:#10b981"></span><div>Green: 0–5% (Good)</div></div>
             <div class="legend-row"><span class="legend-swatch" style="background:#f59e0b"></span><div>Yellow: 5–10% (Monitor)</div></div>
             <div class="legend-row"><span class="legend-swatch" style="background:#ef4444"></span><div>Red: &gt;10% (Risk)</div></div>
-            <div style="font-size:12px; margin-top:6px; color:#374151;">Colors represent % above market median; green is healthy network coverage and pricing.</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:6px;">Colors show % above market median; green indicates healthy network pricing & access.</div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-3">
-        <div class="panel">
+        <div class="panel panel-eq">
           <h6>Market Intelligence & Alerts</h6>
           <div class="alert alert-danger alert-card"><strong>CRITICAL:</strong> CardioHealth acquired 3 practices — regional share 65%. Lock in contracts.</div>
           <div class="alert alert-warning alert-card"><strong>WARNING:</strong> Aetna raised cardiology rates +8% — copycat risk.</div>
           <div class="alert alert-success alert-card"><strong>OPPORTUNITY:</strong> 80% providers in High-Value quadrant.</div>
           <div class="alert alert-info alert-card"><strong>COMPLIANCE:</strong> 3 counties below adequacy threshold — recruit 2 PCPs.</div>
+          <div style="margin-top:auto; font-size:13px; color:var(--muted);">Tip: click a state marker to auto-filter the Rate Benchmark table and see state-specific rationale.</div>
         </div>
       </div>
     </div>
 
-    <!-- Middle row -->
+    <!-- middle row: three panels side-by-side -->
     <div class="row g-3 mt-2">
       <div class="col-md-4">
-        <div class="panel">
+        <div class="panel panel-eq">
           <h6>Financial Strength <small class="small-muted">Score: 72/100</small></h6>
-          <div id="financial-table"></div>
+          <div class="scroll-table" id="financial-table"></div>
         </div>
       </div>
 
       <div class="col-md-4">
-        <div class="panel">
+        <div class="panel panel-eq">
           <h6>Rate Benchmarking <small class="small-muted">Score: 65/100</small></h6>
-          <div id="rate-table"></div>
+          <div class="scroll-table" id="rate-table"></div>
           <div class="rationale-box" id="rate-rationale">
             <strong>Rationale:</strong> Overpayment driven by provider concentration (HHI 0.62) and high historical rate trend (+12% YoY).
           </div>
@@ -290,115 +194,97 @@
       </div>
 
       <div class="col-md-4">
-        <div class="panel">
+        <div class="panel panel-eq">
           <h6>Provider Quality <small class="small-muted">Score: 87/100</small></h6>
           <div id="quality-plot"></div>
+          <div style="margin-top:8px; color:var(--muted); font-size:13px;">Quadrant shows Cost vs Quality — top-right = premium; bottom-right = poor value.</div>
         </div>
       </div>
     </div>
 
-    <!-- Scenario and tracker row -->
-    <div class="row g-3 mt-3">
+    <!-- scenario + goals row -->
+    <div class="row g-3 mt-3 align-items-start">
       <div class="col-lg-9">
-        <div class="scenario-box">
-          <h6>Scenario Planner — What if I cut rates?</h6>
-          <div class="row">
-            <div class="col-sm-4">
-              <label class="small-muted">Specialty</label>
-              <select id="scenario-specialty" class="form-select form-select-sm mb-2">
-                <option>Cardiology</option>
-                <option>Orthopedics</option>
-                <option>Radiology</option>
-                <option>Primary Care</option>
-              </select>
-              <label class="small-muted">Rate Change (%)</label>
-              <input id="scenario-slider" type="range" min="-10" max="10" value="-6" class="form-range">
-              <div style="color:#2c6aef; font-weight:600; margin-top:8px"><span id="slider-value">-6%</span></div>
-            </div>
-            <div class="col-sm-8">
-              <div id="scenario-result"></div>
-            </div>
+        <div class="scenario-box d-flex gap-3">
+          <div class="scenario-controls">
+            <div style="font-weight:700; margin-bottom:6px;">Scenario Planner — What if I cut rates?</div>
+            <label class="small-muted">Specialty</label>
+            <select id="scenario-specialty" class="form-select form-select-sm mb-2">
+              <option>Cardiology</option>
+              <option>Orthopedics</option>
+              <option>Radiology</option>
+              <option>Primary Care</option>
+            </select>
+            <label class="small-muted">Rate Change (%)</label>
+            <input id="scenario-slider" type="range" min="-10" max="10" value="-6" class="form-range mb-1">
+            <div style="color:var(--accent); font-weight:700;" id="slider-value">-6%</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:10px;">Tip: negative values = cuts, positive = increases. Use results to estimate net benefit after penalties.</div>
+          </div>
+
+          <div class="scenario-results panel" id="scenario-result">
+            <!-- results are rendered here by JS -->
           </div>
         </div>
       </div>
 
       <div class="col-lg-3">
-        <div class="panel">
+        <div class="panel panel-eq">
           <h6>Strategic Goals</h6>
-          <div class="small-muted">Cost Reduction</div><div style="font-weight:700; color:#000000">$9.2M / $15M</div><div class="progress mb-3"><div class="progress-bar" style="width:61%">61%</div></div>
-          <div class="small-muted">CMS Adequacy</div><div style="font-weight:700; color:#000000">92%</div><div class="progress mb-3"><div class="progress-bar" style="width:92%">92%</div></div>
+          <div class="small-muted">Cost Reduction</div>
+          <div style="font-weight:700; font-size:16px">$9.2M / $15M</div>
+          <div class="progress mb-3"><div class="progress-bar" style="width:61%">61%</div></div>
+          <div class="small-muted">CMS Adequacy</div>
+          <div style="font-weight:700; font-size:16px">92%</div>
+          <div class="progress mb-3"><div class="progress-bar" style="width:92%">92%</div></div>
+          <div style="margin-top:auto; font-size:13px; color:var(--muted);">Note: Goals are synthetic for demo. Real product would persist targets per payer.</div>
         </div>
       </div>
     </div>
 
-    <div class="footer text-center mt-3">Prototype (synthetic data) — HiLabs 2025 • No PHI</div>
+    <div class="footer">Prototype (synthetic data) — HiLabs 2025 • No PHI</div>
   </div>
 
-  <!-- Dependencies -->
+  <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.24.0/plotly.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // Region data with coordinates
+    // --- region data ---
     const regionData = {
-      "Southwest": {
-        center: [34.5, -111.5],
-        zoom: 6,
-        states: [
-          {s:"AZ", n:"Arizona", v:9, pos:[34.2,-111.7], impact:85, save:2.1},
-          {s:"NM", n:"New Mexico", v:7, pos:[34.5,-106.0], impact:42, save:0.9},
-          {s:"NV", n:"Nevada", v:11, pos:[39.0,-116.0], impact:58, save:1.8}
-        ]
-      },
-      "New England": {
-        center: [43.5, -71.5],
-        zoom: 7,
-        states: [
-          {s:"MA", n:"Massachusetts", v:8, pos:[42.4,-71.4], impact:95, save:2.4},
-          {s:"CT", n:"Connecticut", v:10, pos:[41.6,-72.7], impact:62, save:1.6},
-          {s:"RI", n:"Rhode Island", v:6, pos:[41.7,-71.5], impact:28, save:0.7},
-          {s:"NH", n:"New Hampshire", v:5, pos:[43.7,-71.5], impact:35, save:0.9}
-        ]
-      },
-      "Pacific Northwest": {
-        center: [45.5, -122.0],
-        zoom: 6,
-        states: [
-          {s:"WA", n:"Washington", v:7, pos:[47.5,-120.5], impact:78, save:1.9},
-          {s:"OR", n:"Oregon", v:9, pos:[43.9,-120.6], impact:55, save:1.4},
-          {s:"CA", n:"Northern California", v:12, pos:[40.5,-122.0], impact:125, save:3.2}
-        ]
-      },
-      "Great Lakes": {
-        center: [42.0, -85.0],
-        zoom: 6,
-        states: [
-          {s:"IL", n:"Illinois", v:10, pos:[40.0,-89.0], impact:105, save:2.8},
-          {s:"MI", n:"Michigan", v:8, pos:[44.3,-85.6], impact:72, save:1.8},
-          {s:"OH", n:"Ohio", v:9, pos:[40.4,-82.9], impact:88, save:2.2}
-        ]
-      },
-      "Southeast": {
-        center: [30.5, -82.0],
-        zoom: 6,
-        states: [
-          {s:"FL", n:"Florida", v:11, pos:[28.0,-81.5], impact:145, save:3.8},
-          {s:"GA", n:"Georgia", v:8, pos:[32.7,-83.5], impact:82, save:2.0},
-          {s:"SC", n:"South Carolina", v:7, pos:[33.8,-81.2], impact:48, save:1.2}
-        ]
-      },
-      "Mountain States": {
-        center: [40.0, -111.5],
-        zoom: 6,
-        states: [
-          {s:"CO", n:"Colorado", v:9, pos:[39.0,-105.5], impact:92, save:2.3},
-          {s:"UT", n:"Utah", v:6, pos:[39.3,-111.7], impact:45, save:1.1},
-          {s:"ID", n:"Idaho", v:5, pos:[44.0,-114.7], impact:32, save:0.8}
-        ]
-      }
+      "Southwest": { center:[34.5,-111.5], zoom:6, states:[
+        {s:"AZ", n:"Arizona", v:9, pos:[34.2,-111.7], impact:85, save:2.1},
+        {s:"NM", n:"New Mexico", v:7, pos:[34.5,-106.0], impact:42, save:0.9},
+        {s:"NV", n:"Nevada", v:11, pos:[39.0,-116.0], impact:58, save:1.8}
+      ]},
+      "New England": { center:[43.5,-71.5], zoom:7, states:[
+        {s:"MA", n:"Massachusetts", v:8, pos:[42.4,-71.4], impact:95, save:2.4},
+        {s:"CT", n:"Connecticut", v:10, pos:[41.6,-72.7], impact:62, save:1.6},
+        {s:"RI", n:"Rhode Island", v:6, pos:[41.7,-71.5], impact:28, save:0.7},
+        {s:"NH", n:"New Hampshire", v:5, pos:[43.7,-71.5], impact:35, save:0.9}
+      ]},
+      "Pacific Northwest": { center:[45.5,-122], zoom:6, states:[
+        {s:"WA", n:"Washington", v:7, pos:[47.5,-120.5], impact:78, save:1.9},
+        {s:"OR", n:"Oregon", v:9, pos:[43.9,-120.6], impact:55, save:1.4},
+        {s:"CA", n:"Northern California", v:12, pos:[40.5,-122], impact:125, save:3.2}
+      ]},
+      "Great Lakes": { center:[42,-85], zoom:6, states:[
+        {s:"IL", n:"Illinois", v:10, pos:[40,-89], impact:105, save:2.8},
+        {s:"MI", n:"Michigan", v:8, pos:[44.3,-85.6], impact:72, save:1.8},
+        {s:"OH", n:"Ohio", v:9, pos:[40.4,-82.9], impact:88, save:2.2}
+      ]},
+      "Southeast": { center:[30.5,-82], zoom:6, states:[
+        {s:"FL", n:"Florida", v:11, pos:[28,-81.5], impact:145, save:3.8},
+        {s:"GA", n:"Georgia", v:8, pos:[32.7,-83.5], impact:82, save:2.0},
+        {s:"SC", n:"South Carolina", v:7, pos:[33.8,-81.2], impact:48, save:1.2}
+      ]},
+      "Mountain States": { center:[40,-111.5], zoom:6, states:[
+        {s:"CO", n:"Colorado", v:9, pos:[39,-105.5], impact:92, save:2.3},
+        {s:"UT", n:"Utah", v:6, pos:[39.3,-111.7], impact:45, save:1.1},
+        {s:"ID", n:"Idaho", v:5, pos:[44,-114.7], impact:32, save:0.8}
+      ]}
     };
 
-    // Mapping network name -> synthetic metrics (to update Key Metrics on selection)
+    // network -> metrics mapping (synthetic)
     const networkMetrics = {
       "Great Plains Care Connect": {spend:280, leakage:15.2, pos:"+8.1%"},
       "PacificCare Integrated Health": {spend:420, leakage:22.4, pos:"+10.5%"},
@@ -410,99 +296,54 @@
       "Rocky Mountain Health": {spend:95, leakage:4.5, pos:"+2.0%"}
     };
 
-    // Initialize map
-    const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([34.5, -111.5], 6);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 19
-    }).addTo(map);
-    
+    // map init
+    const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([34.5,-111.5],6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ attribution:'© OpenStreetMap', maxZoom:19 }).addTo(map);
     let currentMarkers = [];
 
-    function colorFor(v){ 
-      if(v>10) return '#ef4444'; 
-      if(v>5) return '#f59e0b'; 
-      return '#10b981'; 
-    }
+    function colorFor(v){ if(v>10) return '#ef4444'; if(v>5) return '#f59e0b'; return '#10b981'; }
 
-    function updateMap(regionKey) {
-      // Remove existing markers
-      currentMarkers.forEach(marker => map.removeLayer(marker));
+    function updateMap(regionKey){
+      currentMarkers.forEach(m => map.removeLayer(m));
       currentMarkers = [];
-
       const data = regionData[regionKey];
-      if (!data) {
-        console.error('Region not found:', regionKey);
-        return;
-      }
-
-      // Smoothly pan and zoom to new region
-      map.flyTo(data.center, data.zoom, {
-        duration: 1.0
-      });
-
-      // Add markers after a short delay to let map settle
-      setTimeout(() => {
+      if(!data) return;
+      map.flyTo(data.center, data.zoom, {duration:0.9});
+      setTimeout(()=> {
         data.states.forEach(st => {
-          const marker = L.circleMarker(st.pos, {
-            radius: 14, 
-            fillColor: colorFor(st.v), 
-            fillOpacity: 0.85, 
-            color: '#2c6aef', 
-            weight: 2.5
-          }).addTo(map);
-          
-          marker.bindTooltip(
-            `<div style="font-weight:600; margin-bottom:4px">${st.n}</div>` +
-            `Overpay: ${st.v}%<br/>` +
-            `Impact: $${st.impact}M<br/>` +
-            `Savings: $${st.save}M`,
-            {
-              className: 'custom-tooltip',
-              direction: 'top'
-            }
-          );
-          
-          marker.on('click', () => {
-            // For demo, scroll to Rate table and update rationale to include state details
+          const marker = L.circleMarker(st.pos, { radius:12, fillColor: colorFor(st.v), fillOpacity:0.95, color:'#0b1220', weight:1.5 }).addTo(map);
+          marker.bindTooltip(`<strong>${st.n}</strong><br>Overpay: ${st.v}%<br>Impact: $${st.impact}M<br>Savings: $${st.save}M`);
+          marker.on('click', ()=> {
             document.getElementById('rate-table').scrollIntoView({behavior:'smooth'});
             document.getElementById('rate-rationale').innerHTML = `<strong>Rationale:</strong> ${st.n} shows overpayment driven by provider concentration (HHI 0.62) and high historic rate trend (+12% YoY).`;
           });
-
           currentMarkers.push(marker);
         });
-      }, 500);
+      }, 350);
     }
-
-    // Initialize with default region
     updateMap("Southwest");
 
-    // Coverage area dropdown change handler
-    document.getElementById('coverage-area').addEventListener('change', function(e) {
-      updateMap(e.target.value);
-    });
+    document.getElementById('coverage-area').addEventListener('change', e=> updateMap(e.target.value));
 
-    // Network name change handler -> updates key metrics using networkMetrics mapping
-    document.getElementById('network-name').addEventListener('change', function(e) {
+    // network selection updates key metrics
+    document.getElementById('network-name').addEventListener('change', function(e){
       const key = e.target.value;
-      const metrics = networkMetrics[key] || networkMetrics["Tri-State Wellness"];
-      // update headline numeric fields (formatted)
-      document.getElementById('total-spend').innerText = `$${(metrics.spend).toLocaleString()}M`;
-      document.getElementById('cost-leakage').innerText = `$${(metrics.leakage).toLocaleString()}M`;
-      document.getElementById('market-position').innerText = metrics.pos + " above median";
-      // update a few snapshot items for visual consistency
-      document.getElementById('provider-count').innerText = Math.max(60, Math.round(metrics.spend * 3.2));
-      document.getElementById('savings-opp').innerText = `${Math.max(5, Math.round(metrics.leakage/0.8))} contracts (~$${(metrics.leakage).toFixed(1)}M)`;
-      document.getElementById('rate-score').innerText = `${Math.max(5,(10 - Math.round(metrics.leakage/2))).toFixed(1)} / 10`;
-      document.getElementById('adequacy').innerText = `${Math.max(85, 95 - Math.round(metrics.leakage/3))}%`;
-      // optionally change map region to a matching one (simple heuristic)
-      if(metrics.spend > 350) updateMap("New England");
-      else if(metrics.spend > 280) updateMap("Great Lakes");
-      else if(metrics.spend > 200) updateMap("Pacific Northwest");
+      const m = networkMetrics[key] || networkMetrics["Tri-State Wellness"];
+      document.getElementById('total-spend').innerText = `$${m.spend.toLocaleString()}M`;
+      document.getElementById('cost-leakage').innerText = `$${m.leakage.toLocaleString()}M`;
+      document.getElementById('market-position').innerText = m.pos + ' above median';
+      document.getElementById('provider-count').innerText = Math.max(60, Math.round(m.spend * 3.2));
+      document.getElementById('savings-opp').innerText = `${Math.max(5, Math.round(m.leakage/0.8))} contracts (~$${m.leakage.toFixed(1)}M)`;
+      document.getElementById('rate-score').innerText = `${Math.max(5,(10 - Math.round(m.leakage/2))).toFixed(1)} / 10`;
+      document.getElementById('adequacy').innerText = `${Math.max(85, 95 - Math.round(m.leakage/3))}%`;
+      // heuristic region mapping
+      if(m.spend > 350) updateMap("New England");
+      else if(m.spend > 280) updateMap("Great Lakes");
+      else if(m.spend > 200) updateMap("Pacific Northwest");
       else updateMap("Southwest");
     });
 
-    // Minimal synthetic data
+    // render tables and plot
     const financialRows = [
       {m:"Net Network Revenue", v:"$3.123B", p:"99th", s:"Excellent"},
       {m:"Avg Provider Margins", v:"-5.1%", p:"31st", s:"Below Avg"},
@@ -510,7 +351,6 @@
       {m:"Days Outstanding", v:"39.1", p:"72nd", s:"Average"},
       {m:"Network Savings Identified", v:"$12.3M", p:"68th", s:"Above Avg"}
     ];
-    
     const rateRows = [
       {sp:"Cardiology (Office)", cur:420, med:390, pct:75, st:"OVERPAYING", sav:"$150K/provider"},
       {sp:"Orthopedics", cur:380, med:350, pct:80, st:"OVERPAYING", sav:"$120K/provider"},
@@ -519,23 +359,19 @@
       {sp:"General Surgery", cur:680, med:620, pct:77, st:"OVERPAYING", sav:"$140K"}
     ];
 
-    function renderFinancial() {
+    function renderFinancial(){
       const el = document.getElementById('financial-table');
       let html = '<table class="table table-sm"><thead><tr><th>Metric</th><th>Value</th><th>Percentile</th><th>Status</th></tr></thead><tbody>';
-      financialRows.forEach(r => { html += `<tr><td>${r.m}</td><td>${r.v}</td><td>${r.p}</td><td>${r.s}</td></tr>`; });
-      html += '</tbody></table>'; 
-      el.innerHTML = html;
+      financialRows.forEach(r => html += `<tr><td>${r.m}</td><td>${r.v}</td><td>${r.p}</td><td>${r.s}</td></tr>`);
+      html += '</tbody></table>'; el.innerHTML = html;
     }
-    
-    function renderRateTable() {
+    function renderRateTable(){
       const el = document.getElementById('rate-table');
       let html = '<table class="table table-sm"><thead><tr><th>Specialty</th><th>Current</th><th>Median</th><th>Pctl</th><th>Status</th><th>Savings</th></tr></thead><tbody>';
-      rateRows.forEach(r => { html += `<tr><td>${r.sp}</td><td>$${r.cur}</td><td>$${r.med}</td><td>${r.pct}th</td><td>${r.st}</td><td>${r.sav}</td></tr>`; });
-      html += '</tbody></table>'; 
-      el.innerHTML = html;
+      rateRows.forEach(r => html += `<tr><td>${r.sp}</td><td>$${r.cur}</td><td>$${r.med}</td><td>${r.pct}th</td><td>${r.st}</td><td>${r.sav}</td></tr>`);
+      html += '</tbody></table>'; el.innerHTML = html;
     }
-    
-    function renderQuality() {
+    function renderQuality(){
       const rows = [
         {x:90,y:15,label:"Ortho Surgery Center X"},
         {x:75,y:85,label:"North Cardiology Clinic"},
@@ -544,67 +380,58 @@
         {x:50,y:49,label:"Rural Health Center"}
       ];
       const data = [{
-        x: rows.map(r=>r.x), 
-        y: rows.map(r=>r.y), 
-        text: rows.map(r=>r.label),
-        mode:'markers', 
-        marker:{
-          size:12, 
-          color: rows.map(r=> r.y>=80 ? '#2c6aef':'#f59e0b')
-        }
+        x: rows.map(r=>r.x), y: rows.map(r=>r.y), text: rows.map(r=>r.label),
+        mode:'markers', marker:{ size:12, color: rows.map(r=> r.y>=80 ? '#2c6aef':'#f59e0b') }
       }];
-      const layout = {
-        margin:{t:10,l:40,r:10,b:30}, 
-        xaxis:{title:'Cost Percentile'}, 
-        yaxis:{title:'Quality Percentile'},
-        hovermode:'closest'
-      };
-      Plotly.newPlot('quality-plot', data, layout, {displayModeBar:false});
+      const layout = { margin:{t:8,l:40,r:8,b:30}, xaxis:{title:'Cost Percentile', range:[40,95]}, yaxis:{title:'Quality Percentile', range:[8,92]}, hovermode:'closest' };
+      Plotly.newPlot('quality-plot', data, layout, {displayModeBar:false, responsive:true});
     }
 
-    // Scenario planner
+    // scenario logic (reads current total-spend)
     const slider = document.getElementById('scenario-slider');
     const sliderValue = document.getElementById('slider-value');
     const scenarioResult = document.getElementById('scenario-result');
-    
-    function updateScenario() {
+
+    function updateScenario(){
       const cut = Number(slider.value);
-      sliderValue.innerText = cut + '%';
+      sliderValue.innerText = (cut>0?'+':'') + cut + '%';
       const specialty = document.getElementById('scenario-specialty').value;
-      const baseSpend = parseFloat(document.getElementById('total-spend').innerText.replace(/[^0-9.-]+/g,"")) || 245; // in millions or regular number
-      // ensure baseSpend in millions for synthetic model:
-      const baseM = baseSpend > 1000 ? Math.round(baseSpend/1000) : baseSpend;
-      const savings = Math.round(Math.abs(cut) * 1.3 * 100)/100;
+      const totalStr = document.getElementById('total-spend').innerText.replace(/[^0-9.]/g,'');
+      let baseM = parseFloat(totalStr);
+      if(isNaN(baseM)) baseM = 245;
+      // if value was formatted with 'M' earlier, keep it in millions
+      if(baseM > 1000) baseM = Math.round(baseM/1000);
+
+      const savings = Math.round(Math.abs(cut) * 1.3 * 100)/100; // $M shorthand
       const exitRisk = Math.min(100, Math.round(Math.abs(cut)*3 + 2));
       const adequacyAfter = Math.max(78, 92 - Math.round(Math.max(0, (Math.abs(cut)-3)*1.5)));
-      
-      // One-line rationale for scenario recommendation (shows model thinking)
-      const rationale = `Overpayment driven by provider concentration (HHI 0.62) and high historical rate trend (+12% YoY). Scenario model uses historical exit elasticity and adequacy thresholds.`;
-      
-      scenarioResult.innerHTML = `<strong>Specialty:</strong> ${specialty} &nbsp; <strong>Cut:</strong> ${cut}%<br/><br/>
-        <table class="table table-sm"><tr><th>Metric</th><th>Before</th><th>After</th></tr>
-        <tr><td>Total Spend</td><td>$${baseM}M</td><td>$${(baseM - savings).toFixed(2)}M</td></tr>
-        <tr><td>Projected Savings</td><td>—</td><td><strong>$${savings}M</strong></td></tr>
-        <tr><td>Provider Exit Risk</td><td>—</td><td>${exitRisk}%</td></tr>
-        <tr><td>Network Adequacy</td><td>92%</td><td>${adequacyAfter}%</td></tr></table>
-        <div class="alert alert-info"><strong>Recommendation:</strong> Consider a smaller cut (e.g., 4%) or recruit 1–2 providers in high-risk counties to maintain adequacy.<div style="margin-top:6px; font-size:13px;"><em>Model rationale:</em> ${rationale}</div></div>`;
+      const rationale = `Overpayment driven by provider concentration (HHI 0.62) and high historical rate trend (+12% YoY). Model uses exit elasticity and adequacy thresholds.`;
+
+      // clear and render results
+      scenarioResult.innerHTML = `<div style="font-weight:700; margin-bottom:8px;">Specialty: ${specialty} &nbsp; &nbsp; Cut: ${cut}%</div>
+        <div style="overflow:auto;">
+          <table class="table table-sm mb-2"><thead><tr><th>Metric</th><th>Before</th><th>After</th></tr></thead>
+          <tbody>
+            <tr><td>Total Spend</td><td>$${baseM}M</td><td>$${(baseM - savings).toFixed(2)}M</td></tr>
+            <tr><td>Projected Savings</td><td>—</td><td><strong>$${savings}M</strong></td></tr>
+            <tr><td>Provider Exit Risk</td><td>—</td><td>${exitRisk}%</td></tr>
+            <tr><td>Network Adequacy</td><td>92%</td><td>${adequacyAfter}%</td></tr>
+          </tbody></table>
+        </div>
+        <div class="alert alert-info mb-0"><strong>Recommendation:</strong> Consider smaller cut (e.g., 4%) or recruit 1–2 providers in impacted counties. <div style="font-size:12px; margin-top:6px;"><em>Model rationale:</em> ${rationale}</div></div>`;
     }
-    
+
     slider.addEventListener('input', updateScenario);
     document.getElementById('scenario-specialty').addEventListener('change', updateScenario);
 
-    // Initial render
-    // Default network metrics
-    (function setInitialNetwork() {
-      const defaultKey = document.getElementById('network-name').value;
-      const evt = new Event('change');
-      document.getElementById('network-name').dispatchEvent(evt);
+    // initial render
+    (function init(){
+      renderFinancial(); renderRateTable(); renderQuality(); updateScenario();
+      // trigger initial network populate
+      document.getElementById('network-name').dispatchEvent(new Event('change'));
+      // ensure plot resizes on window resize
+      window.addEventListener('resize', ()=> Plotly.Plots.resize(document.getElementById('quality-plot')));
     })();
-
-    renderFinancial(); 
-    renderRateTable(); 
-    renderQuality(); 
-    updateScenario();
   </script>
 </body>
 </html>
