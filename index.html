@@ -60,6 +60,7 @@
       height: 360px; 
       border-radius: 8px; 
       border: 2px solid #e5e7eb;
+      position:relative;
     }
     .panel { 
       background: white; 
@@ -140,6 +141,22 @@
       margin-top: 8px;
       display: block;
     }
+    /* Legend box on map */
+    .map-legend {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      background: rgba(255,255,255,0.95);
+      padding: 8px 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      font-size: 13px;
+      z-index: 999;
+      border-left: 4px solid #2c6aef;
+    }
+    .legend-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .legend-swatch { width:14px; height:14px; border-radius:3px; display:inline-block; border:1px solid #ccc; }
+    .rationale-box { margin-top:10px; padding:8px; border-radius:6px; background:#f3f4f6; font-size:13px; color:#111827; }
   </style>
 </head>
 <body>
@@ -170,7 +187,7 @@
             <option value="Great Plains Care Connect">Great Plains Care Connect</option>
             <option value="PacificCare Integrated Health">PacificCare Integrated Health Network</option>
             <option value="Midwest Regional Medical">Midwest Regional Medical Alliance</option>
-            <option value="Tri-State Wellness">Tri-State Wellness Group</option>
+            <option value="Tri-State Wellness" selected>Tri-State Wellness Group</option>
             <option value="Northeast Community Health">Northeast Community Health Partners</option>
             <option value="Southern Cross Healthcare">Southern Cross Healthcare Network</option>
             <option value="Bayview Specialty Health">Bayview Specialty Health System</option>
@@ -181,10 +198,10 @@
           <label class="dropdown-label">Network Type</label>
           <select id="network-type" class="form-select form-select-sm">
             <option value="Type-1">Type-1: Primary Care Network</option>
-            <option value="Type-2" selected>Type-2: Specialty Care Network</option>
+            <option value="Type-2">Type-2: Specialty Care Network</option>
             <option value="Type-3">Type-3: Behavioral Health Network</option>
             <option value="Type-4">Type-4: Dental/Vision Network</option>
-            <option value="Type-5">Type-5: Multi-Specialty Network</option>
+            <option value="Type-5" selected>Type-5: Multi-Specialty Network</option>
             <option value="Type-6">Type-6: Accountable Care Organization (ACO)</option>
             <option value="Type-7">Type-7: Managed Care Network (HMO/PPO)</option>
           </select>
@@ -201,10 +218,10 @@
           </select>
 
           <hr>
-          <div><strong>Providers:</strong> 850</div>
-          <div style="margin-top:6px"><strong>Savings Opp:</strong> 15 contracts (~$12.3M)</div>
-          <div style="margin-top:6px"><strong>Rate Score:</strong> 7.2 / 10</div>
-          <div style="margin-top:6px"><strong>Adequacy:</strong> 92%</div>
+          <div><strong>Providers:</strong> <span id="provider-count">850</span></div>
+          <div style="margin-top:6px"><strong>Savings Opp:</strong> <span id="savings-opp">15 contracts (~$12.3M)</span></div>
+          <div style="margin-top:6px"><strong>Rate Score:</strong> <span id="rate-score">7.2 / 10</span></div>
+          <div style="margin-top:6px"><strong>Adequacy:</strong> <span id="adequacy">92%</span></div>
         </div>
       </div>
 
@@ -212,13 +229,34 @@
         <div class="panel mb-3">
           <h6>Key Metrics</h6>
           <div class="row">
-            <div class="col-4"><div class="tile-title">Total Network Spend</div><div style="font-weight:700; color:#000000">$245,000,000</div><div class="small-muted">Down 3% YoY</div></div>
-            <div class="col-4"><div class="tile-title">Cost Leakage</div><div style="font-weight:700; color:#000000">$12,300,000</div><div class="small-muted">From rate benchmarking</div></div>
-            <div class="col-4"><div class="tile-title">Market Position</div><div style="font-weight:700; color:#000000">+6.2% above median</div><div class="small-muted">Overpay +6.2%</div></div>
+            <div class="col-4">
+              <div class="tile-title">Total Network Spend</div>
+              <div style="font-weight:700; color:#000000" id="total-spend">$245,000,000</div>
+              <div class="small-muted">Trend: Down 3% YoY</div>
+            </div>
+            <div class="col-4">
+              <div class="tile-title">Cost Leakage</div>
+              <div style="font-weight:700; color:#000000" id="cost-leakage">$12,300,000</div>
+              <div class="small-muted">From rate benchmarking</div>
+            </div>
+            <div class="col-4">
+              <div class="tile-title">Market Position</div>
+              <div style="font-weight:700; color:#000000" id="market-position">+6.2% above median</div>
+              <div class="small-muted">Overpay +6.2%</div>
+            </div>
           </div>
         </div>
 
-        <div id="map" class="panel"></div>
+        <div id="map" class="panel">
+          <!-- Legend box (fixed) -->
+          <div class="map-legend" id="map-legend">
+            <div style="font-weight:600; margin-bottom:6px;">Map Legend (Overpayment vs Market)</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#10b981"></span><div>Green: 0–5% (Good)</div></div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#f59e0b"></span><div>Yellow: 5–10% (Monitor)</div></div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#ef4444"></span><div>Red: &gt;10% (Risk)</div></div>
+            <div style="font-size:12px; margin-top:6px; color:#374151;">Colors represent % above market median; green is healthy network coverage and pricing.</div>
+          </div>
+        </div>
       </div>
 
       <div class="col-lg-3">
@@ -245,6 +283,9 @@
         <div class="panel">
           <h6>Rate Benchmarking <small class="small-muted">Score: 65/100</small></h6>
           <div id="rate-table"></div>
+          <div class="rationale-box" id="rate-rationale">
+            <strong>Rationale:</strong> Overpayment driven by provider concentration (HHI 0.62) and high historical rate trend (+12% YoY).
+          </div>
         </div>
       </div>
 
@@ -357,6 +398,18 @@
       }
     };
 
+    // Mapping network name -> synthetic metrics (to update Key Metrics on selection)
+    const networkMetrics = {
+      "Great Plains Care Connect": {spend:280, leakage:15.2, pos:"+8.1%"},
+      "PacificCare Integrated Health": {spend:420, leakage:22.4, pos:"+10.5%"},
+      "Midwest Regional Medical": {spend:310, leakage:13.6, pos:"+5.8%"},
+      "Tri-State Wellness": {spend:245, leakage:12.3, pos:"+6.2%"},
+      "Northeast Community Health": {spend:360, leakage:18.0, pos:"+9.0%"},
+      "Southern Cross Healthcare": {spend:200, leakage:9.8, pos:"+4.2%"},
+      "Bayview Specialty Health": {spend:150, leakage:7.4, pos:"+3.6%"},
+      "Rocky Mountain Health": {spend:95, leakage:4.5, pos:"+2.0%"}
+    };
+
     // Initialize map
     const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([34.5, -111.5], 6);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -411,7 +464,9 @@
           );
           
           marker.on('click', () => {
+            // For demo, scroll to Rate table and update rationale to include state details
             document.getElementById('rate-table').scrollIntoView({behavior:'smooth'});
+            document.getElementById('rate-rationale').innerHTML = `<strong>Rationale:</strong> ${st.n} shows overpayment driven by provider concentration (HHI 0.62) and high historic rate trend (+12% YoY).`;
           });
 
           currentMarkers.push(marker);
@@ -425,6 +480,26 @@
     // Coverage area dropdown change handler
     document.getElementById('coverage-area').addEventListener('change', function(e) {
       updateMap(e.target.value);
+    });
+
+    // Network name change handler -> updates key metrics using networkMetrics mapping
+    document.getElementById('network-name').addEventListener('change', function(e) {
+      const key = e.target.value;
+      const metrics = networkMetrics[key] || networkMetrics["Tri-State Wellness"];
+      // update headline numeric fields (formatted)
+      document.getElementById('total-spend').innerText = `$${(metrics.spend).toLocaleString()}M`;
+      document.getElementById('cost-leakage').innerText = `$${(metrics.leakage).toLocaleString()}M`;
+      document.getElementById('market-position').innerText = metrics.pos + " above median";
+      // update a few snapshot items for visual consistency
+      document.getElementById('provider-count').innerText = Math.max(60, Math.round(metrics.spend * 3.2));
+      document.getElementById('savings-opp').innerText = `${Math.max(5, Math.round(metrics.leakage/0.8))} contracts (~$${(metrics.leakage).toFixed(1)}M)`;
+      document.getElementById('rate-score').innerText = `${Math.max(5,(10 - Math.round(metrics.leakage/2))).toFixed(1)} / 10`;
+      document.getElementById('adequacy').innerText = `${Math.max(85, 95 - Math.round(metrics.leakage/3))}%`;
+      // optionally change map region to a matching one (simple heuristic)
+      if(metrics.spend > 350) updateMap("New England");
+      else if(metrics.spend > 280) updateMap("Great Lakes");
+      else if(metrics.spend > 200) updateMap("Pacific Northwest");
+      else updateMap("Southwest");
     });
 
     // Minimal synthetic data
@@ -496,24 +571,36 @@
       const cut = Number(slider.value);
       sliderValue.innerText = cut + '%';
       const specialty = document.getElementById('scenario-specialty').value;
-      const baseSpend = 245;
+      const baseSpend = parseFloat(document.getElementById('total-spend').innerText.replace(/[^0-9.-]+/g,"")) || 245; // in millions or regular number
+      // ensure baseSpend in millions for synthetic model:
+      const baseM = baseSpend > 1000 ? Math.round(baseSpend/1000) : baseSpend;
       const savings = Math.round(Math.abs(cut) * 1.3 * 100)/100;
       const exitRisk = Math.min(100, Math.round(Math.abs(cut)*3 + 2));
-      const adequacyAfter = Math.max(80, 92 - Math.round(Math.max(0, (Math.abs(cut)-3)*1.5)));
+      const adequacyAfter = Math.max(78, 92 - Math.round(Math.max(0, (Math.abs(cut)-3)*1.5)));
+      
+      // One-line rationale for scenario recommendation (shows model thinking)
+      const rationale = `Overpayment driven by provider concentration (HHI 0.62) and high historical rate trend (+12% YoY). Scenario model uses historical exit elasticity and adequacy thresholds.`;
       
       scenarioResult.innerHTML = `<strong>Specialty:</strong> ${specialty} &nbsp; <strong>Cut:</strong> ${cut}%<br/><br/>
         <table class="table table-sm"><tr><th>Metric</th><th>Before</th><th>After</th></tr>
-        <tr><td>Total Spend</td><td>$${baseSpend}M</td><td>$${(baseSpend - savings).toFixed(2)}M</td></tr>
-        <tr><td>Projected Savings</td><td>—</td><td>$${savings}M</td></tr>
+        <tr><td>Total Spend</td><td>$${baseM}M</td><td>$${(baseM - savings).toFixed(2)}M</td></tr>
+        <tr><td>Projected Savings</td><td>—</td><td><strong>$${savings}M</strong></td></tr>
         <tr><td>Provider Exit Risk</td><td>—</td><td>${exitRisk}%</td></tr>
         <tr><td>Network Adequacy</td><td>92%</td><td>${adequacyAfter}%</td></tr></table>
-        <div class="alert alert-info">Recommendation: Consider smaller cut (e.g., 4%) or recruit providers to maintain adequacy.</div>`;
+        <div class="alert alert-info"><strong>Recommendation:</strong> Consider a smaller cut (e.g., 4%) or recruit 1–2 providers in high-risk counties to maintain adequacy.<div style="margin-top:6px; font-size:13px;"><em>Model rationale:</em> ${rationale}</div></div>`;
     }
     
     slider.addEventListener('input', updateScenario);
     document.getElementById('scenario-specialty').addEventListener('change', updateScenario);
 
     // Initial render
+    // Default network metrics
+    (function setInitialNetwork() {
+      const defaultKey = document.getElementById('network-name').value;
+      const evt = new Event('change');
+      document.getElementById('network-name').dispatchEvent(evt);
+    })();
+
     renderFinancial(); 
     renderRateTable(); 
     renderQuality(); 
@@ -521,4 +608,3 @@
   </script>
 </body>
 </html>
-
