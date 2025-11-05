@@ -9,17 +9,125 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f7fafc; color:#111827; }
-    .header { padding: 14px 18px; background: #fff; border-radius:6px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 6px rgba(2,6,23,0.04); }
-    .kpi { background: #ffffff; border-radius:8px; padding:10px; box-shadow:0 1px 3px rgba(2,6,23,0.04); margin-left:8px; min-width:150px; text-align:center; }
-    .tile-title { font-size:12px; color:#6b7280; }
-    .tile-value { font-weight:700; font-size:18px; }
-    #map { height:360px; border-radius:6px; }
-    .panel { background:white; padding:12px; border-radius:8px; box-shadow:0 1px 4px rgba(2,6,23,0.04); }
-    .small-muted { color:#6b7280; font-size:12px; }
-    .alert-card { margin-bottom:8px; }
-    .scenario-box { background:#fff; padding:12px; border-radius:8px; box-shadow:0 1px 3px rgba(2,6,23,0.04); }
-    .footer { font-size:13px; color:#6b7280; margin-top:12px; }
+    body { 
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
+      background: #f8f9fa; 
+      color: #000000; 
+    }
+    .header { 
+      padding: 18px 24px; 
+      background: #2c6aef; 
+      color: #ffffff;
+      border-radius: 8px; 
+      margin-bottom: 16px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      box-shadow: 0 2px 8px rgba(44, 106, 239, 0.2); 
+    }
+    .header h4 { 
+      margin: 0; 
+      color: #ffffff; 
+      font-weight: 600; 
+    }
+    .header-subtitle { 
+      font-size: 13px; 
+      color: rgba(255, 255, 255, 0.85); 
+      margin-top: 4px;
+    }
+    .kpi { 
+      background: #ffffff; 
+      border-radius: 8px; 
+      padding: 12px; 
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); 
+      margin-left: 10px; 
+      min-width: 150px; 
+      text-align: center; 
+      border-left: 3px solid #2c6aef;
+    }
+    .tile-title { 
+      font-size: 12px; 
+      color: #6b7280; 
+      font-weight: 500;
+    }
+    .tile-value { 
+      font-weight: 700; 
+      font-size: 20px; 
+      color: #000000;
+      margin: 4px 0;
+    }
+    #map { 
+      height: 360px; 
+      border-radius: 8px; 
+      border: 2px solid #e5e7eb;
+    }
+    .panel { 
+      background: white; 
+      padding: 16px; 
+      border-radius: 8px; 
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); 
+      border-left: 3px solid #2c6aef;
+    }
+    .panel h6 {
+      color: #000000;
+      font-weight: 600;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #2c6aef;
+      padding-bottom: 8px;
+    }
+    .small-muted { 
+      color: #6b7280; 
+      font-size: 12px; 
+    }
+    .alert-card { 
+      margin-bottom: 10px; 
+      font-size: 13px;
+    }
+    .scenario-box { 
+      background: #fff; 
+      padding: 18px; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); 
+      border-left: 4px solid #2c6aef;
+    }
+    .scenario-box h6 {
+      color: #000000;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .footer { 
+      font-size: 13px; 
+      color: #6b7280; 
+      margin-top: 16px; 
+    }
+    .table thead th {
+      background-color: #2c6aef;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 12px;
+      border: none;
+    }
+    .table-sm td {
+      font-size: 13px;
+      color: #000000;
+    }
+    .progress-bar {
+      background-color: #2c6aef !important;
+    }
+    .btn-primary {
+      background-color: #2c6aef;
+      border-color: #2c6aef;
+    }
+    .btn-primary:hover {
+      background-color: #1e54d1;
+      border-color: #1e54d1;
+    }
+    .form-range::-webkit-slider-thumb {
+      background: #2c6aef;
+    }
+    .form-range::-moz-range-thumb {
+      background: #2c6aef;
+    }
   </style>
 </head>
 <body>
@@ -27,8 +135,8 @@
     <!-- Header -->
     <div class="header">
       <div>
-        <h4 style="margin:0">HiLabs | Risk & Rate Intelligence Platform</h4>
-        <div style="font-size:13px; color:#6b7280">User: Jenifer Hayes — VP, Network Strategy</div>
+        <h4>HiLabs | Risk & Rate Intelligence Platform</h4>
+        <div class="header-subtitle">User: Jenifer Hayes — VP, Network Strategy</div>
       </div>
       <div style="display:flex; gap:10px; align-items:center;">
         <div class="kpi"><div class="tile-title">Patient Satisfaction</div><div class="tile-value">81 / 100</div><div class="small-muted">Conf 82%</div></div>
@@ -43,9 +151,9 @@
       <div class="col-lg-3">
         <div class="panel">
           <h6>Network Snapshot</h6>
-          <div class="small-muted">Mid Health Network (ID 40778)</div>
-          <div style="margin-top:8px"><strong>Type:</strong> Type-5 (Multi-specialty)</div>
-          <div style="margin-top:8px"><strong>Coverage:</strong> West Coast Central</div>
+          <div class="small-muted">Great Plains Care Connect (ID 40778)</div>
+          <div style="margin-top:10px"><strong>Type:</strong> Type-2 (Specialty Care Network)</div>
+          <div style="margin-top:8px"><strong>Coverage:</strong> Southwest Corridor – AZ, NM, NV</div>
           <hr>
           <div><strong>Providers:</strong> 850</div>
           <div style="margin-top:6px"><strong>Savings Opp:</strong> 15 contracts (~$12.3M)</div>
@@ -58,9 +166,9 @@
         <div class="panel mb-3">
           <h6>Key Metrics</h6>
           <div class="row">
-            <div class="col-4"><div class="tile-title">Total Network Spend</div><div style="font-weight:700">$245,000,000</div><div class="small-muted">Down 3% YoY</div></div>
-            <div class="col-4"><div class="tile-title">Cost Leakage</div><div style="font-weight:700">$12,300,000</div><div class="small-muted">From rate benchmarking</div></div>
-            <div class="col-4"><div class="tile-title">Market Position</div><div style="font-weight:700">+6.2% above median</div><div class="small-muted">Overpay +6.2%</div></div>
+            <div class="col-4"><div class="tile-title">Total Network Spend</div><div style="font-weight:700; color:#000000">$245,000,000</div><div class="small-muted">Down 3% YoY</div></div>
+            <div class="col-4"><div class="tile-title">Cost Leakage</div><div style="font-weight:700; color:#000000">$12,300,000</div><div class="small-muted">From rate benchmarking</div></div>
+            <div class="col-4"><div class="tile-title">Market Position</div><div style="font-weight:700; color:#000000">+6.2% above median</div><div class="small-muted">Overpay +6.2%</div></div>
           </div>
         </div>
 
@@ -73,7 +181,7 @@
           <div class="alert alert-danger alert-card"><strong>CRITICAL:</strong> CardioHealth acquired 3 practices — regional share 65%. Lock in contracts.</div>
           <div class="alert alert-warning alert-card"><strong>WARNING:</strong> Aetna raised cardiology rates +8% — copycat risk.</div>
           <div class="alert alert-success alert-card"><strong>OPPORTUNITY:</strong> 80% providers in High-Value quadrant.</div>
-          <div class="alert alert-secondary alert-card"><strong>COMPLIANCE:</strong> 3 counties below adequacy threshold — recruit 2 PCPs.</div>
+          <div class="alert alert-info alert-card"><strong>COMPLIANCE:</strong> 3 counties below adequacy threshold — recruit 2 PCPs.</div>
         </div>
       </div>
     </div>
@@ -118,7 +226,7 @@
               </select>
               <label class="small-muted">Rate Change (%)</label>
               <input id="scenario-slider" type="range" min="-10" max="10" value="-6" class="form-range">
-              <div><span id="slider-value">-6%</span></div>
+              <div style="color:#2c6aef; font-weight:600; margin-top:8px"><span id="slider-value">-6%</span></div>
             </div>
             <div class="col-sm-8">
               <div id="scenario-result"></div>
@@ -130,8 +238,8 @@
       <div class="col-lg-3">
         <div class="panel">
           <h6>Strategic Goals</h6>
-          <div class="small-muted">Cost Reduction</div><div style="font-weight:700">$9.2M / $15M</div><div class="progress mb-2"><div class="progress-bar bg-info" style="width:61%">61%</div></div>
-          <div class="small-muted">CMS Adequacy</div><div style="font-weight:700">92%</div><div class="progress mb-2"><div class="progress-bar bg-warning" style="width:92%">92%</div></div>
+          <div class="small-muted">Cost Reduction</div><div style="font-weight:700; color:#000000">$9.2M / $15M</div><div class="progress mb-3"><div class="progress-bar" style="width:61%">61%</div></div>
+          <div class="small-muted">CMS Adequacy</div><div style="font-weight:700; color:#000000">92%</div><div class="progress mb-3"><div class="progress-bar" style="width:92%">92%</div></div>
         </div>
       </div>
     </div>
@@ -182,28 +290,25 @@
       ];
       const data = [{
         x: rows.map(r=>r.x), y: rows.map(r=>r.y), text: rows.map(r=>r.label),
-        mode:'markers', marker:{size:12, color: rows.map(r=> r.y>=80 ? '#10b981':'#f59e0b')}
+        mode:'markers', marker:{size:12, color: rows.map(r=> r.y>=80 ? '#2c6aef':'#f59e0b')}
       }];
       const layout = {margin:{t:10,l:40,r:10,b:30}, xaxis:{title:'Cost Percentile'}, yaxis:{title:'Quality Percentile'}};
       Plotly.newPlot('quality-plot', data, layout, {displayModeBar:false});
     }
 
-    // Leaflet basic markers (synthetic)
-    const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([37.8, -96], 4);
+    // Leaflet basic markers (synthetic) - focused on Southwest
+    const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([34.5, -111.5], 6);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:''}).addTo(map);
     const states = [
-      {s:"CA", n:"California", v:11, pos:[36.77,-119.42], impact:180000000, save:3200000},
-      {s:"NY", n:"New York", v:4, pos:[43.0,-75.0], impact:45000000, save:1100000},
-      {s:"NV", n:"Nevada", v:7, pos:[39.0,-116.0], impact:42000000, save:900000},
-      {s:"TX", n:"Texas", v:6, pos:[31.0,-99.0], impact:65000000, save:1700000},
-      {s:"AZ", n:"Arizona", v:9, pos:[34.2,-111.7], impact:22000000, save:600000}
+      {s:"AZ", n:"Arizona", v:9, pos:[34.2,-111.7], impact:85000000, save:2100000},
+      {s:"NM", n:"New Mexico", v:7, pos:[34.5,-106.0], impact:42000000, save:900000},
+      {s:"NV", n:"Nevada", v:11, pos:[39.0,-116.0], impact:58000000, save:1800000}
     ];
     function colorFor(v){ if(v>10) return '#ef4444'; if(v>5) return '#f59e0b'; return '#10b981'; }
     states.forEach(st=>{
-      const c = L.circleMarker(st.pos, {radius:10, fillColor: colorFor(st.v), fillOpacity:0.9, color:'#222', weight:0.6}).addTo(map);
+      const c = L.circleMarker(st.pos, {radius:12, fillColor: colorFor(st.v), fillOpacity:0.9, color:'#2c6aef', weight:2}).addTo(map);
       c.bindTooltip(`<strong>${st.n}</strong><br/>Overpay: ${st.v}%<br/>Impact: $${(st.impact/1e6).toFixed(0)}M<br/>Savings: $${(st.save/1e6).toFixed(1)}M`);
       c.on('click', ()=> {
-        // example filter action: scroll to Rate table and highlight
         document.getElementById('rate-table').scrollIntoView({behavior:'smooth'});
       });
     });
@@ -241,3 +346,4 @@
   </script>
 </body>
 </html>
+
