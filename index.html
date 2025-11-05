@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HiLabs — HiView Dashboard (Jenifer Hayes)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap CSS (stable CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f7fafc; color:#111827; }
+    .header { padding: 14px 18px; background: #fff; border-radius:6px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 6px rgba(2,6,23,0.04); }
+    .kpi { background: #ffffff; border-radius:8px; padding:10px; box-shadow:0 1px 3px rgba(2,6,23,0.04); margin-left:8px; min-width:150px; text-align:center; }
+    .tile-title { font-size:12px; color:#6b7280; }
+    .tile-value { font-weight:700; font-size:18px; }
+    #map { height:360px; border-radius:6px; }
+    .panel { background:white; padding:12px; border-radius:8px; box-shadow:0 1px 4px rgba(2,6,23,0.04); }
+    .small-muted { color:#6b7280; font-size:12px; }
+    .alert-card { margin-bottom:8px; }
+    .scenario-box { background:#fff; padding:12px; border-radius:8px; box-shadow:0 1px 3px rgba(2,6,23,0.04); }
+    .footer { font-size:13px; color:#6b7280; margin-top:12px; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid p-3">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <h4 style="margin:0">HiLabs | Risk & Rate Intelligence Platform</h4>
+        <div style="font-size:13px; color:#6b7280">User: Jenifer Hayes — VP, Network Strategy</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <div class="kpi"><div class="tile-title">Patient Satisfaction</div><div class="tile-value">81 / 100</div><div class="small-muted">Conf 82%</div></div>
+        <div class="kpi"><div class="tile-title">Provider ROI</div><div class="tile-value">112.6%</div><div class="small-muted">Conf 88%</div></div>
+        <div class="kpi"><div class="tile-title">Accessibility</div><div class="tile-value">58 / 100</div><div class="small-muted">Conf 75%</div></div>
+        <div class="kpi"><div class="tile-title">Value / Cost</div><div class="tile-value">132.3%</div><div class="small-muted">Conf 86%</div></div>
+      </div>
+    </div>
+
+    <!-- Top row -->
+    <div class="row g-3">
+      <div class="col-lg-3">
+        <div class="panel">
+          <h6>Network Snapshot</h6>
+          <div class="small-muted">Mid Health Network (ID 40778)</div>
+          <div style="margin-top:8px"><strong>Type:</strong> Type-5 (Multi-specialty)</div>
+          <div style="margin-top:8px"><strong>Coverage:</strong> West Coast Central</div>
+          <hr>
+          <div><strong>Providers:</strong> 850</div>
+          <div style="margin-top:6px"><strong>Savings Opp:</strong> 15 contracts (~$12.3M)</div>
+          <div style="margin-top:6px"><strong>Rate Score:</strong> 7.2 / 10</div>
+          <div style="margin-top:6px"><strong>Adequacy:</strong> 92%</div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="panel mb-3">
+          <h6>Key Metrics</h6>
+          <div class="row">
+            <div class="col-4"><div class="tile-title">Total Network Spend</div><div style="font-weight:700">$245,000,000</div><div class="small-muted">Down 3% YoY</div></div>
+            <div class="col-4"><div class="tile-title">Cost Leakage</div><div style="font-weight:700">$12,300,000</div><div class="small-muted">From rate benchmarking</div></div>
+            <div class="col-4"><div class="tile-title">Market Position</div><div style="font-weight:700">+6.2% above median</div><div class="small-muted">Overpay +6.2%</div></div>
+          </div>
+        </div>
+
+        <div id="map" class="panel"></div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="panel">
+          <h6>Market Intelligence & Alerts</h6>
+          <div class="alert alert-danger alert-card"><strong>CRITICAL:</strong> CardioHealth acquired 3 practices — regional share 65%. Lock in contracts.</div>
+          <div class="alert alert-warning alert-card"><strong>WARNING:</strong> Aetna raised cardiology rates +8% — copycat risk.</div>
+          <div class="alert alert-success alert-card"><strong>OPPORTUNITY:</strong> 80% providers in High-Value quadrant.</div>
+          <div class="alert alert-secondary alert-card"><strong>COMPLIANCE:</strong> 3 counties below adequacy threshold — recruit 2 PCPs.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle row -->
+    <div class="row g-3 mt-2">
+      <div class="col-md-4">
+        <div class="panel">
+          <h6>Financial Strength <small class="small-muted">Score: 72/100</small></h6>
+          <div id="financial-table"></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel">
+          <h6>Rate Benchmarking <small class="small-muted">Score: 65/100</small></h6>
+          <div id="rate-table"></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel">
+          <h6>Provider Quality <small class="small-muted">Score: 87/100</small></h6>
+          <div id="quality-plot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario and tracker row -->
+    <div class="row g-3 mt-3">
+      <div class="col-lg-9">
+        <div class="scenario-box">
+          <h6>Scenario Planner — What if I cut rates?</h6>
+          <div class="row">
+            <div class="col-sm-4">
+              <label class="small-muted">Specialty</label>
+              <select id="scenario-specialty" class="form-select form-select-sm mb-2">
+                <option>Cardiology</option>
+                <option>Orthopedics</option>
+                <option>Radiology</option>
+                <option>Primary Care</option>
+              </select>
+              <label class="small-muted">Rate Change (%)</label>
+              <input id="scenario-slider" type="range" min="-10" max="10" value="-6" class="form-range">
+              <div><span id="slider-value">-6%</span></div>
+            </div>
+            <div class="col-sm-8">
+              <div id="scenario-result"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="panel">
+          <h6>Strategic Goals</h6>
+          <div class="small-muted">Cost Reduction</div><div style="font-weight:700">$9.2M / $15M</div><div class="progress mb-2"><div class="progress-bar bg-info" style="width:61%">61%</div></div>
+          <div class="small-muted">CMS Adequacy</div><div style="font-weight:700">92%</div><div class="progress mb-2"><div class="progress-bar bg-warning" style="width:92%">92%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer text-center mt-3">Prototype (synthetic data) — HiLabs 2025 • No PHI</div>
+  </div>
+
+  <!-- Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.24.0/plotly.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Minimal synthetic data and render functions (kept simple)
+    const financialRows = [
+      {m:"Net Network Revenue", v:"$3.123B", p:"99th", s:"Excellent"},
+      {m:"Avg Provider Margins", v:"-5.1%", p:"31st", s:"Below Avg"},
+      {m:"Net Operating Profit", v:"11.8%", p:"6th", s:"Poor"},
+      {m:"Days Outstanding", v:"39.1", p:"72nd", s:"Average"},
+      {m:"Network Savings Identified", v:"$12.3M", p:"68th", s:"Above Avg"}
+    ];
+    const rateRows = [
+      {sp:"Cardiology (Office)", cur:420, med:390, pct:75, st:"OVERPAYING", sav:"$150K/provider"},
+      {sp:"Orthopedics", cur:380, med:350, pct:80, st:"OVERPAYING", sav:"$120K/provider"},
+      {sp:"Primary Care", cur:185, med:175, pct:60, st:"MODERATE", sav:"$95K/provider"},
+      {sp:"Radiology (MRI)", cur:520, med:475, pct:82, st:"OVERPAYING", sav:"$180K"},
+      {sp:"General Surgery", cur:680, med:620, pct:77, st:"OVERPAYING", sav:"$140K"}
+    ];
+
+    function renderFinancial() {
+      const el = document.getElementById('financial-table');
+      let html = '<table class="table table-sm"><thead><tr><th>Metric</th><th>Value</th><th>Percentile</th><th>Status</th></tr></thead><tbody>';
+      financialRows.forEach(r => { html += `<tr><td>${r.m}</td><td>${r.v}</td><td>${r.p}</td><td>${r.s}</td></tr>`; });
+      html += '</tbody></table>'; el.innerHTML = html;
+    }
+    function renderRateTable() {
+      const el = document.getElementById('rate-table');
+      let html = '<table class="table table-sm"><thead><tr><th>Specialty</th><th>Current</th><th>Median</th><th>Pctl</th><th>Status</th><th>Savings</th></tr></thead><tbody>';
+      rateRows.forEach(r => { html += `<tr><td>${r.sp}</td><td>$${r.cur}</td><td>$${r.med}</td><td>${r.pct}th</td><td>${r.st}</td><td>${r.sav}</td></tr>`; });
+      html += '</tbody></table>'; el.innerHTML = html;
+    }
+    function renderQuality() {
+      const rows = [
+        {x:90,y:15,label:"Ortho Surgery Center X"},
+        {x:75,y:85,label:"North Cardiology Clinic"},
+        {x:82,y:72,label:"Metro Radiology"},
+        {x:60,y:78,label:"Community PCP Group"},
+        {x:50,y:49,label:"Rural Health Center"}
+      ];
+      const data = [{
+        x: rows.map(r=>r.x), y: rows.map(r=>r.y), text: rows.map(r=>r.label),
+        mode:'markers', marker:{size:12, color: rows.map(r=> r.y>=80 ? '#10b981':'#f59e0b')}
+      }];
+      const layout = {margin:{t:10,l:40,r:10,b:30}, xaxis:{title:'Cost Percentile'}, yaxis:{title:'Quality Percentile'}};
+      Plotly.newPlot('quality-plot', data, layout, {displayModeBar:false});
+    }
+
+    // Leaflet basic markers (synthetic)
+    const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([37.8, -96], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:''}).addTo(map);
+    const states = [
+      {s:"CA", n:"California", v:11, pos:[36.77,-119.42], impact:180000000, save:3200000},
+      {s:"NY", n:"New York", v:4, pos:[43.0,-75.0], impact:45000000, save:1100000},
+      {s:"NV", n:"Nevada", v:7, pos:[39.0,-116.0], impact:42000000, save:900000},
+      {s:"TX", n:"Texas", v:6, pos:[31.0,-99.0], impact:65000000, save:1700000},
+      {s:"AZ", n:"Arizona", v:9, pos:[34.2,-111.7], impact:22000000, save:600000}
+    ];
+    function colorFor(v){ if(v>10) return '#ef4444'; if(v>5) return '#f59e0b'; return '#10b981'; }
+    states.forEach(st=>{
+      const c = L.circleMarker(st.pos, {radius:10, fillColor: colorFor(st.v), fillOpacity:0.9, color:'#222', weight:0.6}).addTo(map);
+      c.bindTooltip(`<strong>${st.n}</strong><br/>Overpay: ${st.v}%<br/>Impact: $${(st.impact/1e6).toFixed(0)}M<br/>Savings: $${(st.save/1e6).toFixed(1)}M`);
+      c.on('click', ()=> {
+        // example filter action: scroll to Rate table and highlight
+        document.getElementById('rate-table').scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    // Scenario planner simple logic
+    const slider = document.getElementById('scenario-slider');
+    const sliderValue = document.getElementById('slider-value');
+    const scenarioResult = document.getElementById('scenario-result');
+    function updateScenario() {
+      const cut = Number(slider.value);
+      sliderValue.innerText = cut + '%';
+      const specialty = document.getElementById('scenario-specialty').value;
+      const baseSpend = 245; // million
+      const savings = Math.round(Math.abs(cut) * 1.3 * 100)/100; // $M
+      const exitRisk = Math.min(100, Math.round(Math.abs(cut)*3 + 2));
+      const adequacyAfter = Math.max(80, 92 - Math.round(Math.max(0, (Math.abs(cut)-3)*1.5)));
+      scenarioResult.innerHTML = `<strong>Specialty:</strong> ${specialty} &nbsp; <strong>Cut:</strong> ${cut}%<br/><br/>
+        <table class="table table-sm"><tr><th>Metric</th><th>Before</th><th>After</th></tr>
+        <tr><td>Total Spend</td><td>$${baseSpend}M</td><td>$${(baseSpend - savings).toFixed(2)}M</td></tr>
+        <tr><td>Projected Savings</td><td>—</td><td>$${savings}M</td></tr>
+        <tr><td>Provider Exit Risk</td><td>—</td><td>${exitRisk}%</td></tr>
+        <tr><td>Network Adequacy</td><td>92%</td><td>${adequacyAfter}%</td></tr></table>
+        <div class="alert alert-info">Recommendation: Consider smaller cut (e.g., 4%) or recruit providers to maintain adequacy.</div>`;
+    }
+    slider.addEventListener('input', updateScenario);
+    document.getElementById('scenario-specialty').addEventListener('change', updateScenario);
+
+    // initial render
+    renderFinancial(); renderRateTable(); renderQuality(); updateScenario();
+
+    // basic error console message help
+    window.addEventListener('error', function(e){
+      console.error('Dashboard error:', e.message);
+    });
+  </script>
+</body>
+</html>
