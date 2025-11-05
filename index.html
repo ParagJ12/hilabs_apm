@@ -137,6 +137,7 @@
       color: #000000;
       font-size: 13px;
       margin-bottom: 4px;
+      margin-top: 8px;
       display: block;
     }
   </style>
@@ -165,9 +166,359 @@
           
           <!-- Network Name Dropdown -->
           <label class="dropdown-label">Network Name</label>
-          <select id="network-name" class="form-select form-select-sm mb-3">
-            <option value="Great Plains Care Connect">Great Plains Care Connect (ID 40778)</option>
+          <select id="network-name" class="form-select form-select-sm">
+            <option value="Great Plains Care Connect">Great Plains Care Connect</option>
             <option value="PacificCare Integrated Health">PacificCare Integrated Health Network</option>
             <option value="Midwest Regional Medical">Midwest Regional Medical Alliance</option>
-            <option value="Tri-State Wellness">Tri-State Wellness Group
+            <option value="Tri-State Wellness">Tri-State Wellness Group</option>
+            <option value="Northeast Community Health">Northeast Community Health Partners</option>
+            <option value="Southern Cross Healthcare">Southern Cross Healthcare Network</option>
+            <option value="Bayview Specialty Health">Bayview Specialty Health System</option>
+            <option value="Rocky Mountain Health">Rocky Mountain Health Collaborative</option>
+          </select>
+
+          <!-- Network Type Dropdown -->
+          <label class="dropdown-label">Network Type</label>
+          <select id="network-type" class="form-select form-select-sm">
+            <option value="Type-1">Type-1: Primary Care Network</option>
+            <option value="Type-2" selected>Type-2: Specialty Care Network</option>
+            <option value="Type-3">Type-3: Behavioral Health Network</option>
+            <option value="Type-4">Type-4: Dental/Vision Network</option>
+            <option value="Type-5">Type-5: Multi-Specialty Network</option>
+            <option value="Type-6">Type-6: Accountable Care Organization (ACO)</option>
+            <option value="Type-7">Type-7: Managed Care Network (HMO/PPO)</option>
+          </select>
+
+          <!-- Coverage Area Dropdown -->
+          <label class="dropdown-label">Coverage Area</label>
+          <select id="coverage-area" class="form-select form-select-sm">
+            <option value="Southwest" selected>Southwest Corridor – AZ, NM, NV</option>
+            <option value="New England">New England Region – MA, CT, RI, NH</option>
+            <option value="Pacific Northwest">Pacific Northwest – WA, OR, Northern CA</option>
+            <option value="Great Lakes">Great Lakes Region – IL, MI, OH</option>
+            <option value="Southeast">Southeast Coastal – FL, GA, SC</option>
+            <option value="Mountain States">Mountain States – CO, UT, ID</option>
+          </select>
+
+          <hr>
+          <div><strong>Providers:</strong> 850</div>
+          <div style="margin-top:6px"><strong>Savings Opp:</strong> 15 contracts (~$12.3M)</div>
+          <div style="margin-top:6px"><strong>Rate Score:</strong> 7.2 / 10</div>
+          <div style="margin-top:6px"><strong>Adequacy:</strong> 92%</div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="panel mb-3">
+          <h6>Key Metrics</h6>
+          <div class="row">
+            <div class="col-4"><div class="tile-title">Total Network Spend</div><div style="font-weight:700; color:#000000">$245,000,000</div><div class="small-muted">Down 3% YoY</div></div>
+            <div class="col-4"><div class="tile-title">Cost Leakage</div><div style="font-weight:700; color:#000000">$12,300,000</div><div class="small-muted">From rate benchmarking</div></div>
+            <div class="col-4"><div class="tile-title">Market Position</div><div style="font-weight:700; color:#000000">+6.2% above median</div><div class="small-muted">Overpay +6.2%</div></div>
+          </div>
+        </div>
+
+        <div id="map" class="panel"></div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="panel">
+          <h6>Market Intelligence & Alerts</h6>
+          <div class="alert alert-danger alert-card"><strong>CRITICAL:</strong> CardioHealth acquired 3 practices — regional share 65%. Lock in contracts.</div>
+          <div class="alert alert-warning alert-card"><strong>WARNING:</strong> Aetna raised cardiology rates +8% — copycat risk.</div>
+          <div class="alert alert-success alert-card"><strong>OPPORTUNITY:</strong> 80% providers in High-Value quadrant.</div>
+          <div class="alert alert-info alert-card"><strong>COMPLIANCE:</strong> 3 counties below adequacy threshold — recruit 2 PCPs.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle row -->
+    <div class="row g-3 mt-2">
+      <div class="col-md-4">
+        <div class="panel">
+          <h6>Financial Strength <small class="small-muted">Score: 72/100</small></h6>
+          <div id="financial-table"></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel">
+          <h6>Rate Benchmarking <small class="small-muted">Score: 65/100</small></h6>
+          <div id="rate-table"></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel">
+          <h6>Provider Quality <small class="small-muted">Score: 87/100</small></h6>
+          <div id="quality-plot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario and tracker row -->
+    <div class="row g-3 mt-3">
+      <div class="col-lg-9">
+        <div class="scenario-box">
+          <h6>Scenario Planner — What if I cut rates?</h6>
+          <div class="row">
+            <div class="col-sm-4">
+              <label class="small-muted">Specialty</label>
+              <select id="scenario-specialty" class="form-select form-select-sm mb-2">
+                <option>Cardiology</option>
+                <option>Orthopedics</option>
+                <option>Radiology</option>
+                <option>Primary Care</option>
+              </select>
+              <label class="small-muted">Rate Change (%)</label>
+              <input id="scenario-slider" type="range" min="-10" max="10" value="-6" class="form-range">
+              <div style="color:#2c6aef; font-weight:600; margin-top:8px"><span id="slider-value">-6%</span></div>
+            </div>
+            <div class="col-sm-8">
+              <div id="scenario-result"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="panel">
+          <h6>Strategic Goals</h6>
+          <div class="small-muted">Cost Reduction</div><div style="font-weight:700; color:#000000">$9.2M / $15M</div><div class="progress mb-3"><div class="progress-bar" style="width:61%">61%</div></div>
+          <div class="small-muted">CMS Adequacy</div><div style="font-weight:700; color:#000000">92%</div><div class="progress mb-3"><div class="progress-bar" style="width:92%">92%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer text-center mt-3">Prototype (synthetic data) — HiLabs 2025 • No PHI</div>
+  </div>
+
+  <!-- Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.24.0/plotly.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Region data with coordinates
+    const regionData = {
+      "Southwest": {
+        center: [34.5, -111.5],
+        zoom: 6,
+        states: [
+          {s:"AZ", n:"Arizona", v:9, pos:[34.2,-111.7], impact:85, save:2.1},
+          {s:"NM", n:"New Mexico", v:7, pos:[34.5,-106.0], impact:42, save:0.9},
+          {s:"NV", n:"Nevada", v:11, pos:[39.0,-116.0], impact:58, save:1.8}
+        ]
+      },
+      "New England": {
+        center: [43.5, -71.5],
+        zoom: 7,
+        states: [
+          {s:"MA", n:"Massachusetts", v:8, pos:[42.4,-71.4], impact:95, save:2.4},
+          {s:"CT", n:"Connecticut", v:10, pos:[41.6,-72.7], impact:62, save:1.6},
+          {s:"RI", n:"Rhode Island", v:6, pos:[41.7,-71.5], impact:28, save:0.7},
+          {s:"NH", n:"New Hampshire", v:5, pos:[43.7,-71.5], impact:35, save:0.9}
+        ]
+      },
+      "Pacific Northwest": {
+        center: [45.5, -122.0],
+        zoom: 6,
+        states: [
+          {s:"WA", n:"Washington", v:7, pos:[47.5,-120.5], impact:78, save:1.9},
+          {s:"OR", n:"Oregon", v:9, pos:[43.9,-120.6], impact:55, save:1.4},
+          {s:"CA", n:"Northern California", v:12, pos:[40.5,-122.0], impact:125, save:3.2}
+        ]
+      },
+      "Great Lakes": {
+        center: [42.0, -85.0],
+        zoom: 6,
+        states: [
+          {s:"IL", n:"Illinois", v:10, pos:[40.0,-89.0], impact:105, save:2.8},
+          {s:"MI", n:"Michigan", v:8, pos:[44.3,-85.6], impact:72, save:1.8},
+          {s:"OH", n:"Ohio", v:9, pos:[40.4,-82.9], impact:88, save:2.2}
+        ]
+      },
+      "Southeast": {
+        center: [30.5, -82.0],
+        zoom: 6,
+        states: [
+          {s:"FL", n:"Florida", v:11, pos:[28.0,-81.5], impact:145, save:3.8},
+          {s:"GA", n:"Georgia", v:8, pos:[32.7,-83.5], impact:82, save:2.0},
+          {s:"SC", n:"South Carolina", v:7, pos:[33.8,-81.2], impact:48, save:1.2}
+        ]
+      },
+      "Mountain States": {
+        center: [40.0, -111.5],
+        zoom: 6,
+        states: [
+          {s:"CO", n:"Colorado", v:9, pos:[39.0,-105.5], impact:92, save:2.3},
+          {s:"UT", n:"Utah", v:6, pos:[39.3,-111.7], impact:45, save:1.1},
+          {s:"ID", n:"Idaho", v:5, pos:[44.0,-114.7], impact:32, save:0.8}
+        ]
+      }
+    };
+
+    // Initialize map
+    const map = L.map('map', {zoomControl:true, scrollWheelZoom:false}).setView([34.5, -111.5], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 19
+    }).addTo(map);
+    
+    let currentMarkers = [];
+
+    function colorFor(v){ 
+      if(v>10) return '#ef4444'; 
+      if(v>5) return '#f59e0b'; 
+      return '#10b981'; 
+    }
+
+    function updateMap(regionKey) {
+      // Remove existing markers
+      currentMarkers.forEach(marker => map.removeLayer(marker));
+      currentMarkers = [];
+
+      const data = regionData[regionKey];
+      if (!data) {
+        console.error('Region not found:', regionKey);
+        return;
+      }
+
+      // Smoothly pan and zoom to new region
+      map.flyTo(data.center, data.zoom, {
+        duration: 1.0
+      });
+
+      // Add markers after a short delay to let map settle
+      setTimeout(() => {
+        data.states.forEach(st => {
+          const marker = L.circleMarker(st.pos, {
+            radius: 14, 
+            fillColor: colorFor(st.v), 
+            fillOpacity: 0.85, 
+            color: '#2c6aef', 
+            weight: 2.5
+          }).addTo(map);
+          
+          marker.bindTooltip(
+            `<div style="font-weight:600; margin-bottom:4px">${st.n}</div>` +
+            `Overpay: ${st.v}%<br/>` +
+            `Impact: $${st.impact}M<br/>` +
+            `Savings: $${st.save}M`,
+            {
+              className: 'custom-tooltip',
+              direction: 'top'
+            }
+          );
+          
+          marker.on('click', () => {
+            document.getElementById('rate-table').scrollIntoView({behavior:'smooth'});
+          });
+
+          currentMarkers.push(marker);
+        });
+      }, 500);
+    }
+
+    // Initialize with default region
+    updateMap("Southwest");
+
+    // Coverage area dropdown change handler
+    document.getElementById('coverage-area').addEventListener('change', function(e) {
+      updateMap(e.target.value);
+    });
+
+    // Minimal synthetic data
+    const financialRows = [
+      {m:"Net Network Revenue", v:"$3.123B", p:"99th", s:"Excellent"},
+      {m:"Avg Provider Margins", v:"-5.1%", p:"31st", s:"Below Avg"},
+      {m:"Net Operating Profit", v:"11.8%", p:"6th", s:"Poor"},
+      {m:"Days Outstanding", v:"39.1", p:"72nd", s:"Average"},
+      {m:"Network Savings Identified", v:"$12.3M", p:"68th", s:"Above Avg"}
+    ];
+    
+    const rateRows = [
+      {sp:"Cardiology (Office)", cur:420, med:390, pct:75, st:"OVERPAYING", sav:"$150K/provider"},
+      {sp:"Orthopedics", cur:380, med:350, pct:80, st:"OVERPAYING", sav:"$120K/provider"},
+      {sp:"Primary Care", cur:185, med:175, pct:60, st:"MODERATE", sav:"$95K/provider"},
+      {sp:"Radiology (MRI)", cur:520, med:475, pct:82, st:"OVERPAYING", sav:"$180K"},
+      {sp:"General Surgery", cur:680, med:620, pct:77, st:"OVERPAYING", sav:"$140K"}
+    ];
+
+    function renderFinancial() {
+      const el = document.getElementById('financial-table');
+      let html = '<table class="table table-sm"><thead><tr><th>Metric</th><th>Value</th><th>Percentile</th><th>Status</th></tr></thead><tbody>';
+      financialRows.forEach(r => { html += `<tr><td>${r.m}</td><td>${r.v}</td><td>${r.p}</td><td>${r.s}</td></tr>`; });
+      html += '</tbody></table>'; 
+      el.innerHTML = html;
+    }
+    
+    function renderRateTable() {
+      const el = document.getElementById('rate-table');
+      let html = '<table class="table table-sm"><thead><tr><th>Specialty</th><th>Current</th><th>Median</th><th>Pctl</th><th>Status</th><th>Savings</th></tr></thead><tbody>';
+      rateRows.forEach(r => { html += `<tr><td>${r.sp}</td><td>$${r.cur}</td><td>$${r.med}</td><td>${r.pct}th</td><td>${r.st}</td><td>${r.sav}</td></tr>`; });
+      html += '</tbody></table>'; 
+      el.innerHTML = html;
+    }
+    
+    function renderQuality() {
+      const rows = [
+        {x:90,y:15,label:"Ortho Surgery Center X"},
+        {x:75,y:85,label:"North Cardiology Clinic"},
+        {x:82,y:72,label:"Metro Radiology"},
+        {x:60,y:78,label:"Community PCP Group"},
+        {x:50,y:49,label:"Rural Health Center"}
+      ];
+      const data = [{
+        x: rows.map(r=>r.x), 
+        y: rows.map(r=>r.y), 
+        text: rows.map(r=>r.label),
+        mode:'markers', 
+        marker:{
+          size:12, 
+          color: rows.map(r=> r.y>=80 ? '#2c6aef':'#f59e0b')
+        }
+      }];
+      const layout = {
+        margin:{t:10,l:40,r:10,b:30}, 
+        xaxis:{title:'Cost Percentile'}, 
+        yaxis:{title:'Quality Percentile'},
+        hovermode:'closest'
+      };
+      Plotly.newPlot('quality-plot', data, layout, {displayModeBar:false});
+    }
+
+    // Scenario planner
+    const slider = document.getElementById('scenario-slider');
+    const sliderValue = document.getElementById('slider-value');
+    const scenarioResult = document.getElementById('scenario-result');
+    
+    function updateScenario() {
+      const cut = Number(slider.value);
+      sliderValue.innerText = cut + '%';
+      const specialty = document.getElementById('scenario-specialty').value;
+      const baseSpend = 245;
+      const savings = Math.round(Math.abs(cut) * 1.3 * 100)/100;
+      const exitRisk = Math.min(100, Math.round(Math.abs(cut)*3 + 2));
+      const adequacyAfter = Math.max(80, 92 - Math.round(Math.max(0, (Math.abs(cut)-3)*1.5)));
+      
+      scenarioResult.innerHTML = `<strong>Specialty:</strong> ${specialty} &nbsp; <strong>Cut:</strong> ${cut}%<br/><br/>
+        <table class="table table-sm"><tr><th>Metric</th><th>Before</th><th>After</th></tr>
+        <tr><td>Total Spend</td><td>$${baseSpend}M</td><td>$${(baseSpend - savings).toFixed(2)}M</td></tr>
+        <tr><td>Projected Savings</td><td>—</td><td>$${savings}M</td></tr>
+        <tr><td>Provider Exit Risk</td><td>—</td><td>${exitRisk}%</td></tr>
+        <tr><td>Network Adequacy</td><td>92%</td><td>${adequacyAfter}%</td></tr></table>
+        <div class="alert alert-info">Recommendation: Consider smaller cut (e.g., 4%) or recruit providers to maintain adequacy.</div>`;
+    }
+    
+    slider.addEventListener('input', updateScenario);
+    document.getElementById('scenario-specialty').addEventListener('change', updateScenario);
+
+    // Initial render
+    renderFinancial(); 
+    renderRateTable(); 
+    renderQuality(); 
+    updateScenario();
+  </script>
+</body>
+</html>
 
