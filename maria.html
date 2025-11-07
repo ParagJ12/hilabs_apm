@@ -8,40 +8,80 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root{
-      --hi-blue:#2c6aef; --accent:#2c6aef; --panel-bg:#ffffff; --muted:#6b7280; --bg:#f6f8fb;
+      --hi-blue:#2c6aef; --accent:#2c6aef; --panel-bg:#ffffff; --muted:#6b7280; --bg:#f8f9fa;
     }
     html,body{height:100%;margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:var(--bg);color:#0b1220}
-    .container{max-width:1300px;margin:18px auto;padding:0 12px;}
-    .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(44,106,239,0.12)}
-    .header-left h4{margin:0;font-weight:700;font-size:20px}
-    .header-sub{font-size:13px;opacity:.95;margin-top:6px}
-    .kpi-row{display:flex;gap:10px;align-items:center}
-    .kpi{background:var(--panel-bg);padding:12px 14px;border-radius:10px;min-width:160px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 4px 12px rgba(2,6,23,0.04)}
-    .kpi .title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
-    .kpi .val{font-weight:700;font-size:20px;margin-top:4px;color:#0b1220}
-    .kpi .small-muted{font-size:11px;color:var(--muted);margin-top:4px}
-    /* panels */
-    .panel{background:var(--panel-bg);border-radius:10px;padding:12px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.04)}
-    .panel h6{margin:0 0 10px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:8px;font-size:15px}
+    .container{max-width:1400px;margin:0 auto;padding:16px;}
+    
+    /* Header */
+    .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:16px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 4px 12px rgba(44,106,239,0.15)}
+    .header-left h4{margin:0;font-weight:700;font-size:22px}
+    .header-sub{font-size:13px;opacity:.9;margin-top:4px}
+    
+    /* KPI Cards */
+    .kpi-row{display:flex;gap:12px;align-items:stretch}
+    .kpi{background:var(--panel-bg);padding:16px 20px;border-radius:10px;min-width:150px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.06);flex:1}
+    .kpi .title{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .kpi .val{font-weight:700;font-size:28px;color:#0b1220;line-height:1.2}
+    .kpi .small-muted{font-size:12px;color:var(--muted);margin-top:6px}
+    
+    /* Panels */
+    .panel{background:var(--panel-bg);border-radius:10px;padding:20px;border-left:4px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:20px}
+    .panel h6{margin:0 0 16px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:10px;font-size:16px}
     .small-muted{color:var(--muted);font-size:13px}
-    /* layout grid tweaks */
-    .row-gap{row-gap:14px}
-    /* map */
-    #map{height:320px;border-radius:8px;border:1px solid #e7eefb;position:relative}
-    .map-legend{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.98);padding:8px 10px;border-radius:8px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.06);font-size:13px;min-width:200px;z-index:500}
-    .legend-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-    .sw{width:14px;height:14px;border-radius:3px;display:inline-block}
-    /* table + scroll */
-    .scroll-table{max-height:260px;overflow:auto;padding-right:6px}
-    .table thead th{background:var(--accent);color:#fff;position:sticky;top:0;z-index:1;font-weight:700}
-    .btn-compact{padding:6px 10px;font-size:13px}
-    /* modal */
-    .modal-body pre{white-space:pre-wrap}
-    /* responsiveness */
-    @media (max-width:991px){
-      .kpi-row{overflow:auto;padding-bottom:6px}
-      #map{height:260px}
-      .panel h6{font-size:14px}
+    
+    /* Filter Row */
+    .filter-row{display:flex;gap:12px;align-items:end;margin-bottom:20px;flex-wrap:wrap}
+    .filter-group{flex:1;min-width:140px}
+    .filter-group label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px}
+    
+    /* Map */
+    .map-container{position:relative;height:400px;border-radius:8px;overflow:hidden;border:2px solid #e5e7eb}
+    #map{height:100%;width:100%}
+    .map-legend{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.98);padding:12px;border-radius:8px;border-left:4px solid var(--accent);box-shadow:0 4px 12px rgba(0,0,0,0.1);font-size:13px;min-width:220px;z-index:1000}
+    .legend-title{font-weight:700;margin-bottom:10px;font-size:14px}
+    .legend-row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+    .sw{width:16px;height:16px;border-radius:4px;display:inline-block;flex-shrink:0}
+    
+    /* Stats Grid */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:20px}
+    .stat-box{text-align:center;padding:12px}
+    .stat-box .label{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .stat-box .value{font-size:20px;font-weight:700;color:#0b1220}
+    
+    /* Compliance Boxes */
+    .compliance-row{display:flex;gap:12px;margin-top:16px}
+    .compliance-box{flex:1;padding:12px;border-radius:8px;text-align:center}
+    .compliance-box .status{font-weight:700;font-size:14px;margin-bottom:4px}
+    
+    /* Table */
+    .table-container{max-height:320px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px}
+    .table{margin:0}
+    .table thead th{background:var(--accent);color:#fff;position:sticky;top:0;z-index:10;font-weight:600;font-size:13px;padding:12px 10px;border:none}
+    .table tbody td{padding:10px;font-size:13px;border-bottom:1px solid #f3f4f6}
+    .table tbody tr:hover{background:#f9fafb;cursor:pointer}
+    
+    /* Goals Section */
+    .goal-box{margin-bottom:20px}
+    .goal-title{font-size:13px;color:var(--muted);margin-bottom:8px}
+    .goal-value{font-size:22px;font-weight:700;margin-bottom:10px}
+    .progress{height:12px;border-radius:6px}
+    .progress-bar{background:var(--accent)}
+    
+    /* Buttons */
+    .btn-compact{padding:8px 16px;font-size:13px;font-weight:600}
+    .btn-row{display:flex;gap:10px;margin-top:16px}
+    
+    /* Responsive */
+    @media (max-width:1200px){
+      .kpi-row{flex-wrap:wrap}
+      .kpi{min-width:140px}
+      .map-container{height:320px}
+    }
+    @media (max-width:768px){
+      .filter-row{flex-direction:column}
+      .filter-group{width:100%}
+      .stats-grid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
@@ -53,189 +93,218 @@
         <h4>HiLabs | Risk & Rate Intelligence Platform</h4>
         <div class="header-sub">User: Maria Santos — Regional Network Manager (Mid-Atlantic)</div>
       </div>
-      <div class="kpi-row" aria-hidden="false">
+      <div class="kpi-row">
         <div class="kpi">
           <div class="title">Coverage Adequacy</div>
-          <div class="val" id="kpi-adequacy">94%</div>
+          <div class="val" id="kpi-adequacy">88%</div>
           <div class="small-muted">Target 95%</div>
         </div>
         <div class="kpi">
           <div class="title">Total Providers</div>
-          <div class="val" id="kpi-providers">1,245</div>
+          <div class="val" id="kpi-providers">980</div>
           <div class="small-muted">In-region</div>
         </div>
         <div class="kpi">
           <div class="title">Potential Savings</div>
-          <div class="val" id="kpi-savings">$3.4M</div>
+          <div class="val" id="kpi-savings">$2.1M</div>
           <div class="small-muted">Negotiation targets</div>
         </div>
       </div>
     </div>
 
-    <!-- top controls + map -->
-    <div class="row row-gap">
-      <div class="col-lg-8">
+    <!-- Main Content Grid -->
+    <div class="row g-3">
+      <!-- Left Column -->
+      <div class="col-lg-7">
+        <!-- Filters & Status -->
         <div class="panel">
-          <div class="d-flex flex-wrap gap-2 align-items-end mb-3">
-            <div style="min-width:160px">
-              <label class="small-muted">Type</label>
+          <h6>Current Coverage Status — Mid-Atlantic</h6>
+          
+          <div class="filter-row">
+            <div class="filter-group">
+              <label>Type</label>
               <select id="type-filter" class="form-select form-select-sm">
-                <option>Health</option><option>Life</option><option>Auto</option>
+                <option selected>Health</option><option>Life</option><option>Auto</option>
               </select>
             </div>
-            <div style="min-width:160px">
-              <label class="small-muted">Coverage Level</label>
+            <div class="filter-group">
+              <label>Coverage Level</label>
               <select id="coverage-filter" class="form-select form-select-sm">
                 <option>Basic</option><option selected>Standard</option><option>Premium</option><option>Comprehensive</option>
               </select>
             </div>
-            <div style="min-width:160px">
-              <label class="small-muted">Date Range</label>
+            <div class="filter-group">
+              <label>Date Range</label>
               <select id="date-range" class="form-select form-select-sm">
-                <option>Last 30 days</option><option selected>Last Quarter</option><option>Last 12 months</option><option>Custom</option>
+                <option>Last 30 days</option><option>Last Quarter</option><option selected>Last 12 months</option>
               </select>
             </div>
-            <div class="ms-auto d-flex gap-2">
+            <div style="display:flex;gap:8px;align-items:end">
               <button id="refresh-btn" class="btn btn-primary btn-compact">Refresh</button>
               <button id="export-btn" class="btn btn-outline-secondary btn-compact">Export</button>
             </div>
           </div>
 
-          <div class="d-flex gap-3 align-items-start">
-            <div style="flex:1">
-              <h6>Current Coverage Status — Mid-Atlantic</h6>
-              <div class="row gx-3">
-                <div class="col-md-4">
-                  <div class="small-muted">Total Active Providers</div>
-                  <div style="font-weight:700;font-size:16px" id="active-providers">1,245</div>
-                </div>
-                <div class="col-md-4">
-                  <div class="small-muted">Average Member Access Distance</div>
-                  <div style="font-weight:700;font-size:16px" id="avg-dist">12.5 miles</div>
-                </div>
-                <div class="col-md-4">
-                  <div class="small-muted">Counties Below Threshold</div>
-                  <div style="font-weight:700;font-size:16px" id="below-counties">3</div>
-                </div>
-              </div>
-              <div class="mt-3">
-                <div class="small-muted">Utilization</div>
-                <div style="font-weight:700;font-size:16px" id="util">89%</div>
-              </div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="label">Total Active Providers</div>
+              <div class="value" id="active-providers">980</div>
             </div>
+            <div class="stat-box">
+              <div class="label">Avg Access Distance</div>
+              <div class="value" id="avg-dist">14.0 miles</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Counties Below Threshold</div>
+              <div class="value" id="below-counties">2</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Utilization</div>
+              <div class="value" id="util">88%</div>
+            </div>
+          </div>
 
-            <div style="width:350px; min-width:260px;">
-              <div class="small-muted mb-2">Compliance</div>
-              <div class="d-flex gap-2">
-                <div style="flex:1;background:#ecfdf5;border-radius:8px;padding:10px"><div style="font-weight:700;color:#059669">Green</div><div class="small-muted">Compliant</div></div>
-                <div style="flex:1;background:#fffbeb;border-radius:8px;padding:10px"><div style="font-weight:700;color:#b45309">Yellow</div><div class="small-muted">At Risk</div></div>
-                <div style="flex:1;background:#fff1f2;border-radius:8px;padding:10px"><div style="font-weight:700;color:#b91c1c">Red</div><div class="small-muted">Non-compliant</div></div>
-              </div>
+          <div class="compliance-row">
+            <div class="compliance-box" style="background:#ecfdf5">
+              <div class="status" style="color:#059669">Green</div>
+              <div class="small-muted">Compliant</div>
+            </div>
+            <div class="compliance-box" style="background:#fffbeb">
+              <div class="status" style="color:#b45309">Yellow</div>
+              <div class="small-muted">At Risk</div>
+            </div>
+            <div class="compliance-box" style="background:#fff1f2">
+              <div class="status" style="color:#b91c1c">Red</div>
+              <div class="small-muted">Non-compliant</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-lg-4">
-        <div class="panel">
-          <h6>Regional Adequacy Map</h6>
-          <div id="map"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- provider table + goals -->
-    <div class="row row-gap">
-      <div class="col-lg-7">
+        <!-- Provider Table -->
         <div class="panel">
           <h6>Provider Network Details</h6>
-          <div class="d-flex gap-2 mb-2">
-            <input id="provider-search" class="form-control form-control-sm" placeholder="Search provider or county" />
-            <select id="specialty-filter" class="form-select form-select-sm" style="width:180px">
-              <option>All specialties</option><option>Cardiology</option><option>Orthopedics</option><option>Primary Care</option><option>Radiology</option>
-            </select>
+          
+          <div class="filter-row">
+            <div class="filter-group" style="flex:2">
+              <input id="provider-search" class="form-control form-control-sm" placeholder="Search provider or county..." />
+            </div>
+            <div class="filter-group">
+              <select id="specialty-filter" class="form-select form-select-sm">
+                <option>All specialties</option><option>Cardiology</option><option>Orthopedics</option><option>Primary Care</option><option>Radiology</option>
+              </select>
+            </div>
             <button id="apply-filter" class="btn btn-outline-primary btn-compact">Apply</button>
-            <div class="ms-auto small-muted align-self-center">Click a row to open negotiation brief</div>
           </div>
-          <div class="scroll-table">
+
+          <div class="table-container">
             <table class="table table-sm">
-              <thead><tr><th>Provider</th><th>Specialty</th><th>County</th><th>Avg Rate vs Market</th><th>Member Load</th><th>Risk</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Provider</th>
+                  <th>Specialty</th>
+                  <th>County</th>
+                  <th>Avg Rate vs Market</th>
+                  <th>Member Load</th>
+                  <th>Risk</th>
+                </tr>
+              </thead>
               <tbody id="provider-tbody"></tbody>
             </table>
           </div>
+          
+          <div class="small-muted" style="margin-top:12px;text-align:center">Click a row to open negotiation brief</div>
         </div>
       </div>
 
+      <!-- Right Column -->
       <div class="col-lg-5">
+        <!-- Map -->
+        <div class="panel">
+          <h6>Regional Adequacy Map</h6>
+          <div class="map-container">
+            <div id="map"></div>
+            <div class="map-legend">
+              <div class="legend-title">Coverage Legend</div>
+              <div class="legend-row">
+                <span class="sw" style="background:#10b981"></span>
+                <div>Green: ≥95% (Compliant)</div>
+              </div>
+              <div class="legend-row">
+                <span class="sw" style="background:#f59e0b"></span>
+                <div>Yellow: 90–95% (At Risk)</div>
+              </div>
+              <div class="legend-row">
+                <span class="sw" style="background:#ef4444"></span>
+                <div>Red: <90% (Non-compliant)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Goals -->
         <div class="panel">
           <h6>Goals & Compliance</h6>
-          <div class="mb-3">
-            <div class="small-muted">Adequacy Target</div>
-            <div style="font-weight:700;font-size:18px">95% by Q4</div>
-            <div class="progress mt-2 mb-2"><div class="progress-bar" id="goal-progress" role="progressbar" style="width:94%">94%</div></div>
-          </div>
-
-          <div class="mb-3">
-            <div class="small-muted">Counties Needing Action</div>
-            <ul id="action-list" style="margin-top:8px"></ul>
-          </div>
-
-          <h6 style="margin-top:10px">Cost Management</h6>
-          <div class="d-flex gap-3">
-            <div style="flex:1">
-              <div class="small-muted">Regional Spend (Q3)</div><div style="font-weight:700" id="spend">$82.4M</div>
-              <div class="small-muted mt-2">Rate Variance vs Market</div><div style="font-weight:700" id="rate-variance">+5.8%</div>
-            </div>
-            <div style="flex:1">
-              <div class="small-muted">Potential Savings</div><div style="font-weight:700" id="pot-savings">$3.4M</div>
-              <div class="small-muted mt-2">Claim Denial Rate</div><div style="font-weight:700" id="denial">7.3%</div>
+          
+          <div class="goal-box">
+            <div class="goal-title">Adequacy Target</div>
+            <div class="goal-value">95% by Q4</div>
+            <div class="progress">
+              <div class="progress-bar" id="goal-progress" role="progressbar" style="width:88%">88%</div>
             </div>
           </div>
 
-          <div class="mt-3 d-flex gap-2">
-            <button id="run-audit" class="btn btn-primary btn-compact">Run Adequacy Audit</button>
-            <button id="download-report" class="btn btn-outline-secondary btn-compact">Download Gap Report</button>
+          <div class="goal-box">
+            <div class="goal-title">Counties Needing Action</div>
+            <ul id="action-list" style="margin:8px 0;padding-left:20px"></ul>
+          </div>
+
+          <div style="border-top:2px solid #e5e7eb;padding-top:16px;margin-top:16px">
+            <h6 style="border:none;padding:0;margin-bottom:12px">Cost Management</h6>
+            <div class="row">
+              <div class="col-6">
+                <div class="small-muted">Regional Spend (Q3)</div>
+                <div style="font-weight:700;font-size:18px" id="spend">$64.3M</div>
+              </div>
+              <div class="col-6">
+                <div class="small-muted">Rate Variance</div>
+                <div style="font-weight:700;font-size:18px" id="rate-variance">+3.2%</div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-6">
+                <div class="small-muted">Potential Savings</div>
+                <div style="font-weight:700;font-size:18px" id="pot-savings">$2.1M</div>
+              </div>
+              <div class="col-6">
+                <div class="small-muted">Claim Denial Rate</div>
+                <div style="font-weight:700;font-size:18px" id="denial">7.3%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button id="run-audit" class="btn btn-primary btn-compact flex-fill">Run Adequacy Audit</button>
+            <button id="download-report" class="btn btn-outline-secondary btn-compact flex-fill">Download Report</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- trend + quick actions -->
-    <div class="row row-gap">
-      <div class="col-lg-8">
-        <div class="panel">
-          <h6>Budget vs Actual & Rate Trends</h6>
-          <div id="trend-plot" style="height:320px"></div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="panel">
-          <h6>Quick Actions</h6>
-          <div class="d-flex flex-column gap-2">
-            <button class="btn btn-outline-primary">Create Recruitment Request</button>
-            <button class="btn btn-outline-warning">Flag Provider for Re-contract</button>
-            <button class="btn btn-outline-success">Push Telehealth Expansion</button>
-          </div>
-          <div class="mt-3 small-muted">Actions are mock/stubbed for the demo.</div>
-        </div>
-      </div>
+    <!-- Footer -->
+    <div class="small-muted text-center" style="margin-top:20px;padding:12px">
+      Prototype (synthetic data) — HiLabs 2025 • No PHI • Last updated: Nov 2025
     </div>
-
-    <div style="height:12px"></div>
-    <div class="small-muted text-center mb-4">Prototype (synthetic data) — HiLabs 2025 • No PHI • Last updated: Nov 2025</div>
   </div>
 
-  <!-- modal for negotiation brief -->
-  <div class="modal fade" id="briefModal" tabindex="-1" aria-hidden="true">
+  <!-- Modal -->
+  <div class="modal fade" id="briefModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="briefTitle">Negotiation Brief</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body" id="briefBody">
-          <pre id="briefPre"></pre>
-        </div>
+        <div class="modal-body"><pre id="briefPre" style="white-space:pre-wrap"></pre></div>
         <div class="modal-footer">
           <button class="btn btn-primary" data-bs-dismiss="modal">Close</button>
         </div>
@@ -243,13 +312,12 @@
     </div>
   </div>
 
-  <!-- libs -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.24.0/plotly.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // synthetic county + provider data
+    // Data
     const counties = [
       {id:'Allegheny', lat:40.44, lon:-79.98, adequacy:87, pop:1250, suggest:"Add 2 PCPs"},
       {id:'Somerset', lat:40.02, lon:-79.08, adequacy:82, pop:45, suggest:"Recruit 1 Cardiologist"},
@@ -258,6 +326,7 @@
       {id:'York', lat:39.96, lon:-76.73, adequacy:95, pop:450, suggest:"OK"},
       {id:'Lancaster', lat:40.04, lon:-76.30, adequacy:90, pop:400, suggest:"Monitor"}
     ];
+    
     let providers = [
       {name:"Allegheny Cardio Clinic", spec:"Cardiology", county:"Allegheny", diff:12, load:420, risk:"High"},
       {name:"Somerset Ortho Center", spec:"Orthopedics", county:"Somerset", diff:9, load:120, risk:"Moderate"},
@@ -267,7 +336,6 @@
       {name:"Lancaster Surgical", spec:"General Surgery", county:"Lancaster", diff:7, load:150, risk:"Moderate"}
     ];
 
-    // network metric presets (used when Type / Coverage change)
     const networkVariants = {
       "Health|Standard": {spend:82.4, leakage:3.4, pos:"+5.8%", providers:1245},
       "Health|Premium": {spend:95.2, leakage:5.1, pos:"+7.6%", providers:1480},
@@ -276,18 +344,9 @@
       "Auto|Standard": {spend:28.6, leakage:0.6, pos:"+1.8%", providers:540}
     };
 
-    // initialize map
+    // Initialize map
     const map = L.map('map',{zoomControl:true, scrollWheelZoom:false}).setView([40.0,-78.0],7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
-
-    // add legend into map container
-    const legend = document.createElement('div');
-    legend.className = 'map-legend';
-    legend.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Coverage Legend</div>
-      <div class="legend-row"><span class="sw" style="background:#10b981"></span><div>Green: ≥95% (Compliant)</div></div>
-      <div class="legend-row"><span class="sw" style="background:#f59e0b"></span><div>Yellow: 90–95% (At Risk)</div></div>
-      <div class="legend-row"><span class="sw" style="background:#ef4444"></span><div>Red: &lt;90% (Non-compliant)</div></div>`;
-    document.getElementById('map').appendChild(legend);
 
     let markers = [];
     function drawCounties(){
@@ -295,67 +354,40 @@
       markers = [];
       counties.forEach(c=>{
         const color = c.adequacy >=95 ? '#10b981' : (c.adequacy >=90 ? '#f59e0b' : '#ef4444');
-        const marker = L.circleMarker([c.lat,c.lon],{radius:11, fillColor:color, color:'#071227', weight:1.2, fillOpacity:0.95}).addTo(map);
+        const marker = L.circleMarker([c.lat,c.lon],{radius:12, fillColor:color, color:'#000', weight:2, fillOpacity:0.9}).addTo(map);
         marker.bindTooltip(`<strong>${c.id}</strong><br>Adequacy: ${c.adequacy}%<br>Pop(k): ${c.pop}<br>Action: ${c.suggest}`);
         marker.on('click', ()=> {
           document.getElementById('provider-search').value = c.id;
           applyProviderFilter();
-          document.getElementById('provider-tbody').scrollIntoView({behavior:'smooth'});
         });
         markers.push(marker);
       });
     }
     drawCounties();
 
-    // populate provider table
+    // Provider table
     function renderProviders(list){
       const tbody = document.getElementById('provider-tbody');
       tbody.innerHTML = '';
       list.forEach(p=>{
         const tr=document.createElement('tr');
-        tr.innerHTML = `<td style="font-weight:600;cursor:pointer">${p.name}</td><td>${p.spec}</td><td>${p.county}</td><td>${p.diff>0? '+'+p.diff+'%': p.diff+'%'}</td><td>${p.load}</td><td>${p.risk}</td>`;
+        tr.innerHTML = `<td style="font-weight:600">${p.name}</td><td>${p.spec}</td><td>${p.county}</td><td>${p.diff>0?'+':''}${p.diff}%</td><td>${p.load}</td><td>${p.risk}</td>`;
         tr.addEventListener('click', ()=> openBrief(p));
         tbody.appendChild(tr);
       });
     }
     renderProviders(providers);
 
-    // basic trend plot
-    function renderTrend(){
-      const months=['Mar','Apr','May','Jun','Jul','Aug','Sep'];
-      const budget=[12,11.5,11.8,12.2,12,11.9,12.5];
-      const actual=[12.4,11.8,12.5,13.2,12.6,12.3,12.9];
-      const rate=[4.2,4.6,5.0,5.1,5.4,5.6,5.8];
-      const t1={x:months,y:budget,name:'Budget ($M)',type:'bar',marker:{color:'#cfe1ff'}};
-      const t2={x:months,y:actual,name:'Actual ($M)',type:'bar',marker:{color:'#2c6aef'}};
-      const t3={x:months,y:rate,name:'Rate Variance (%)',yaxis:'y2',mode:'lines+markers',marker:{color:'#f59e0b'},line:{width:3}};
-      const layout={margin:{t:20,l:40,r:40,b:50},yaxis:{title:'$M'},yaxis2:{title:'Rate %',overlaying:'y',side:'right'},legend:{orientation:'h',y:-0.18}};
-      Plotly.newPlot('trend-plot',[t1,t2,t3],layout,{displayModeBar:false,responsive:true});
-    }
-    renderTrend();
-
-    // negotiation brief modal
+    // Modal
     const briefModal = new bootstrap.Modal(document.getElementById('briefModal'));
     function openBrief(p){
       document.getElementById('briefTitle').innerText = p.name + " — Negotiation Brief";
-      const text = [
-        `Provider: ${p.name}`,
-        `Specialty: ${p.spec}`,
-        `County: ${p.county}`,
-        `Avg rate above market: ${p.diff}%`,
-        `Member load: ${p.load}`,
-        `Risk: ${p.risk}`,
-        ``,
-        `Recommendation: Consider targeted renegotiation. Suggested approach: offer staged reduction (start -4%), monitor acceptance. If provider exits, recruit 1 replacement in county.`,
-        ``,
-        `Estimated regional impact: $${(p.diff*0.05).toFixed(2)}M`,
-        `Model rationale: Overpayment driven by provider concentration (HHI 0.62) and historical rate trend (+12% YoY).`
-      ].join("\n");
+      const text = `Provider: ${p.name}\nSpecialty: ${p.spec}\nCounty: ${p.county}\nAvg rate above market: ${p.diff}%\nMember load: ${p.load}\nRisk: ${p.risk}\n\nRecommendation: Consider targeted renegotiation.\nEstimated regional impact: $${(p.diff*0.05).toFixed(2)}M`;
       document.getElementById('briefPre').innerText = text;
       briefModal.show();
     }
 
-    // filtering logic
+    // Filters
     function applyProviderFilter(){
       const q = document.getElementById('provider-search').value.trim().toLowerCase();
       const spec = document.getElementById('specialty-filter').value;
@@ -369,60 +401,51 @@
     document.getElementById('apply-filter').addEventListener('click', applyProviderFilter);
     document.getElementById('provider-search').addEventListener('keydown', e=>{ if(e.key==='Enter') applyProviderFilter(); });
 
-    // KPI refresh logic tied to filters
+    // Update KPIs
     function updateKPIs(){
       const type = document.getElementById('type-filter').value;
       const coverage = document.getElementById('coverage-filter').value;
       const key = `${type}|${coverage}`;
-      const v = networkVariants[key] || {spend:82.4, leakage:3.4, pos:"+5.8%", providers:1245};
+      const v = networkVariants[key] || networkVariants["Health|Basic"];
+      
       document.getElementById('spend').innerText = `$${v.spend}M`;
       document.getElementById('pot-savings').innerText = `$${v.leakage}M`;
       document.getElementById('rate-variance').innerText = v.pos;
       document.getElementById('kpi-providers').innerText = v.providers.toLocaleString();
       document.getElementById('kpi-savings').innerText = `$${v.leakage}M`;
       document.getElementById('active-providers').innerText = v.providers.toLocaleString();
-      // adequacy change heuristic: better coverage -> +1 or -1
+      
       const baseAdequacy = Math.round(counties.reduce((s,c)=>s+c.adequacy,0)/counties.length);
       const adj = (coverage==='Premium'?1:coverage==='Basic'?-2:0);
       const adequacy = Math.max(78, Math.min(98, baseAdequacy + adj));
       document.getElementById('kpi-adequacy').innerText = adequacy + '%';
       document.getElementById('goal-progress').style.width = adequacy + '%';
       document.getElementById('goal-progress').innerText = adequacy + '%';
-      // update actions list
+      
       const actions = counties.filter(c=>c.adequacy<95).map(c=>`<li>${c.id} — ${c.suggest}</li>`).join('');
-      document.getElementById('action-list').innerHTML = actions || '<li>None</li>';
-      // update global small numbers
+      document.getElementById('action-list').innerHTML = actions || '<li>All counties compliant</li>';
+      
       document.getElementById('below-counties').innerText = counties.filter(c=>c.adequacy<90).length;
       document.getElementById('avg-dist').innerText = (12.5 + (coverage==='Premium'?-1:coverage==='Basic'?1.5:0)).toFixed(1) + " miles";
       document.getElementById('util').innerText = (89 + (coverage==='Premium'?1:-1)) + '%';
     }
 
-    // refresh button: randomize slightly to demonstrate interactive updates
+    // Event handlers
     document.getElementById('refresh-btn').addEventListener('click', ()=>{
       counties.forEach(c=> c.adequacy = Math.max(78, Math.min(98, Math.round(c.adequacy + (Math.random()*5-2)))));
       drawCounties();
       updateKPIs();
-      renderProviders(providers);
-      renderTrend();
     });
-
-    // export stub
-    document.getElementById('export-btn').addEventListener('click', ()=> alert('Export stub — implement html2canvas or server export in production.'));
-
-    // audit + report stubs
-    document.getElementById('run-audit').addEventListener('click', ()=> alert('Adequacy audit triggered (demo).'));
-    document.getElementById('download-report').addEventListener('click', ()=> alert('Download stub — gap report (demo).'));
-
-    // update filter handlers
+    
+    document.getElementById('export-btn').addEventListener('click', ()=> alert('Export functionality (demo)'));
+    document.getElementById('run-audit').addEventListener('click', ()=> alert('Adequacy audit triggered (demo)'));
+    document.getElementById('download-report').addEventListener('click', ()=> alert('Download report (demo)'));
+    
     document.getElementById('type-filter').addEventListener('change', updateKPIs);
     document.getElementById('coverage-filter').addEventListener('change', updateKPIs);
-    document.getElementById('date-range').addEventListener('change', updateKPIs);
-
-    // initial render
-    (function init(){
-      updateKPIs();
-      renderProviders(providers);
-    })();
+    
+    // Initialize
+    updateKPIs();
   </script>
 </body>
 </html>
