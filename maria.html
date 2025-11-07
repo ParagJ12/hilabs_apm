@@ -11,37 +11,50 @@
       --hi-blue:#2c6aef; --accent:#2c6aef; --panel-bg:#ffffff; --muted:#6b7280; --bg:#f6f8fb;
     }
     html,body{height:100%;margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:var(--bg);color:#0b1220}
-    .container{max-width:1300px;margin:18px auto;padding:0 12px;}
-    .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(44,106,239,0.12)}
+    .container{max-width:1320px;margin:18px auto;padding:0 12px;}
+    /* Header */
+    .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(44,106,239,0.12)}
     .header-left h4{margin:0;font-weight:700;font-size:20px}
     .header-sub{font-size:13px;opacity:.95;margin-top:6px}
-    .kpi-row{display:flex;gap:10px;align-items:center}
+    .kpi-row{display:flex;gap:12px;align-items:center}
     .kpi{background:var(--panel-bg);padding:12px 14px;border-radius:10px;min-width:160px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 4px 12px rgba(2,6,23,0.04)}
     .kpi .title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
     .kpi .val{font-weight:700;font-size:20px;margin-top:4px;color:#0b1220}
     .kpi .small-muted{font-size:11px;color:var(--muted);margin-top:4px}
     /* panels */
-    .panel{background:var(--panel-bg);border-radius:10px;padding:12px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+    .panel{background:var(--panel-bg);border-radius:10px;padding:14px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.04);display:flex;flex-direction:column}
     .panel h6{margin:0 0 10px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:8px;font-size:15px}
     .small-muted{color:var(--muted);font-size:13px}
     /* layout grid tweaks */
     .row-gap{row-gap:14px}
     /* map */
     #map{height:320px;border-radius:8px;border:1px solid #e7eefb;position:relative}
-    .map-legend{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.98);padding:8px 10px;border-radius:8px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.06);font-size:13px;min-width:200px;z-index:500}
+    .map-legend{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.98);padding:8px 10px;border-radius:8px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.06);font-size:13px;min-width:200px;z-index:1000}
     .legend-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
     .sw{width:14px;height:14px;border-radius:3px;display:inline-block}
     /* table + scroll */
-    .scroll-table{max-height:260px;overflow:auto;padding-right:6px}
+    .scroll-table{max-height:300px;overflow:auto;padding-right:6px}
     .table thead th{background:var(--accent);color:#fff;position:sticky;top:0;z-index:1;font-weight:700}
     .btn-compact{padding:6px 10px;font-size:13px}
     /* modal */
     .modal-body pre{white-space:pre-wrap}
-    /* responsiveness */
+    /* equal-height panels per row */
+    .row-equal > .col-lg-4 > .panel,
+    .row-equal > .col-lg-5 > .panel,
+    .row-equal > .col-lg-6 > .panel,
+    .row-equal > .col-lg-7 > .panel,
+    .row-equal > .col-lg-8 > .panel {
+      height:100%;
+    }
+    /* clean spacing, responsive */
+    @media (max-width:1199px){
+      .container{max-width:1000px}
+    }
     @media (max-width:991px){
       .kpi-row{overflow:auto;padding-bottom:6px}
       #map{height:260px}
       .panel h6{font-size:14px}
+      .map-legend{right:8px;left:auto;top:8px;min-width:170px}
     }
   </style>
 </head>
@@ -53,6 +66,7 @@
         <h4>HiLabs | Risk & Rate Intelligence Platform</h4>
         <div class="header-sub">User: Maria Santos — Regional Network Manager (Mid-Atlantic)</div>
       </div>
+
       <div class="kpi-row" aria-hidden="false">
         <div class="kpi">
           <div class="title">Coverage Adequacy</div>
@@ -73,7 +87,7 @@
     </div>
 
     <!-- top controls + map -->
-    <div class="row row-gap">
+    <div class="row row-gap row-equal">
       <div class="col-lg-8">
         <div class="panel">
           <div class="d-flex flex-wrap gap-2 align-items-end mb-3">
@@ -105,26 +119,26 @@
             <div style="flex:1">
               <h6>Current Coverage Status — Mid-Atlantic</h6>
               <div class="row gx-3">
-                <div class="col-md-4">
+                <div class="col-md-4 col-6 mb-2">
                   <div class="small-muted">Total Active Providers</div>
                   <div style="font-weight:700;font-size:16px" id="active-providers">1,245</div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-6 mb-2">
                   <div class="small-muted">Average Member Access Distance</div>
                   <div style="font-weight:700;font-size:16px" id="avg-dist">12.5 miles</div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-6 mb-2">
                   <div class="small-muted">Counties Below Threshold</div>
                   <div style="font-weight:700;font-size:16px" id="below-counties">3</div>
                 </div>
               </div>
-              <div class="mt-3">
+              <div class="mt-2">
                 <div class="small-muted">Utilization</div>
                 <div style="font-weight:700;font-size:16px" id="util">89%</div>
               </div>
             </div>
 
-            <div style="width:350px; min-width:260px;">
+            <div style="width:320px; min-width:220px;">
               <div class="small-muted mb-2">Compliance</div>
               <div class="d-flex gap-2">
                 <div style="flex:1;background:#ecfdf5;border-radius:8px;padding:10px"><div style="font-weight:700;color:#059669">Green</div><div class="small-muted">Compliant</div></div>
@@ -133,32 +147,34 @@
               </div>
             </div>
           </div>
+
+          <div style="margin-top:12px" class="small-muted">Tip: Use filters above to update KPIs and map. Click a county on the map to filter providers.</div>
         </div>
       </div>
 
       <div class="col-lg-4">
-        <div class="panel">
+        <div class="panel h-100">
           <h6>Regional Adequacy Map</h6>
-          <div id="map"></div>
+          <div id="map" class="mb-0"></div>
         </div>
       </div>
     </div>
 
     <!-- provider table + goals -->
-    <div class="row row-gap">
+    <div class="row row-gap" style="align-items:start;">
       <div class="col-lg-7">
         <div class="panel">
           <h6>Provider Network Details</h6>
-          <div class="d-flex gap-2 mb-2">
+          <div class="d-flex gap-2 mb-2 align-items-center">
             <input id="provider-search" class="form-control form-control-sm" placeholder="Search provider or county" />
             <select id="specialty-filter" class="form-select form-select-sm" style="width:180px">
               <option>All specialties</option><option>Cardiology</option><option>Orthopedics</option><option>Primary Care</option><option>Radiology</option>
             </select>
             <button id="apply-filter" class="btn btn-outline-primary btn-compact">Apply</button>
-            <div class="ms-auto small-muted align-self-center">Click a row to open negotiation brief</div>
+            <div class="ms-auto small-muted">Click a row to open negotiation brief</div>
           </div>
           <div class="scroll-table">
-            <table class="table table-sm">
+            <table class="table table-sm mb-0">
               <thead><tr><th>Provider</th><th>Specialty</th><th>County</th><th>Avg Rate vs Market</th><th>Member Load</th><th>Risk</th></tr></thead>
               <tbody id="provider-tbody"></tbody>
             </table>
@@ -180,7 +196,7 @@
             <ul id="action-list" style="margin-top:8px"></ul>
           </div>
 
-          <h6 style="margin-top:10px">Cost Management</h6>
+          <h6 style="margin-top:6px">Cost Management</h6>
           <div class="d-flex gap-3">
             <div style="flex:1">
               <div class="small-muted">Regional Spend (Q3)</div><div style="font-weight:700" id="spend">$82.4M</div>
@@ -201,7 +217,7 @@
     </div>
 
     <!-- trend + quick actions -->
-    <div class="row row-gap">
+    <div class="row row-gap" style="align-items:start;">
       <div class="col-lg-8">
         <div class="panel">
           <h6>Budget vs Actual & Rate Trends</h6>
@@ -222,7 +238,7 @@
     </div>
 
     <div style="height:12px"></div>
-    <div class="small-muted text-center mb-4">Prototype (synthetic data) | HiLabs 2025 • No PHI • Last updated: Nov 2025</div>
+    <div class="small-muted text-center mb-4">Prototype (synthetic data) — HiLabs 2025 • No PHI • Last updated: Nov 2025</div>
   </div>
 
   <!-- modal for negotiation brief -->
@@ -280,13 +296,14 @@
     const map = L.map('map',{zoomControl:true, scrollWheelZoom:false}).setView([40.0,-78.0],7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
 
-    // add legend into map container
+    // add legend into map container (leaflet controls would be alternative)
     const legend = document.createElement('div');
     legend.className = 'map-legend';
     legend.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Coverage Legend</div>
       <div class="legend-row"><span class="sw" style="background:#10b981"></span><div>Green: ≥95% (Compliant)</div></div>
       <div class="legend-row"><span class="sw" style="background:#f59e0b"></span><div>Yellow: 90–95% (At Risk)</div></div>
-      <div class="legend-row"><span class="sw" style="background:#ef4444"></span><div>Red: &lt;90% (Non-compliant)</div></div>`;
+      <div class="legend-row"><span class="sw" style="background:#ef4444"></span><div>Red: &lt;90% (Non-compliant)</div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">Colors = % above/below market median / adequacy</div>`;
     document.getElementById('map').appendChild(legend);
 
     let markers = [];
@@ -304,6 +321,8 @@
         });
         markers.push(marker);
       });
+      // ensure map redraws properly after DOM changes
+      setTimeout(()=> map.invalidateSize(), 200);
     }
     drawCounties();
 
@@ -346,7 +365,7 @@
         `Member load: ${p.load}`,
         `Risk: ${p.risk}`,
         ``,
-        `Recommendation: Consider targeted renegotiation. Suggested approach: offer staged reduction (start -4%), monitor acceptance. If provider exits, recruit 1 replacement in county.`,
+        `Recommendation: Consider targeted renegotiation. Suggested approach: staged reduction (start -4%), monitor acceptance. If provider exits, recruit replacement in county.`,
         ``,
         `Estimated regional impact: $${(p.diff*0.05).toFixed(2)}M`,
         `Model rationale: Overpayment driven by provider concentration (HHI 0.62) and historical rate trend (+12% YoY).`
@@ -381,6 +400,7 @@
       document.getElementById('kpi-providers').innerText = v.providers.toLocaleString();
       document.getElementById('kpi-savings').innerText = `$${v.leakage}M`;
       document.getElementById('active-providers').innerText = v.providers.toLocaleString();
+
       // adequacy change heuristic: better coverage -> +1 or -1
       const baseAdequacy = Math.round(counties.reduce((s,c)=>s+c.adequacy,0)/counties.length);
       const adj = (coverage==='Premium'?1:coverage==='Basic'?-2:0);
@@ -388,10 +408,12 @@
       document.getElementById('kpi-adequacy').innerText = adequacy + '%';
       document.getElementById('goal-progress').style.width = adequacy + '%';
       document.getElementById('goal-progress').innerText = adequacy + '%';
+
       // update actions list
       const actions = counties.filter(c=>c.adequacy<95).map(c=>`<li>${c.id} — ${c.suggest}</li>`).join('');
       document.getElementById('action-list').innerHTML = actions || '<li>None</li>';
-      // update global small numbers
+
+      // update small numbers
       document.getElementById('below-counties').innerText = counties.filter(c=>c.adequacy<90).length;
       document.getElementById('avg-dist').innerText = (12.5 + (coverage==='Premium'?-1:coverage==='Basic'?1.5:0)).toFixed(1) + " miles";
       document.getElementById('util').innerText = (89 + (coverage==='Premium'?1:-1)) + '%';
