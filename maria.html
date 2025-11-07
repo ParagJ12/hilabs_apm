@@ -13,12 +13,13 @@
     html,body{height:100%;margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:var(--bg);color:#0b1220}
     .container{max-width:1300px;margin:18px auto;padding:0 12px;}
     .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(44,106,239,0.12)}
-    .header-left h4{margin:0;font-weight:700}
+    .header-left h4{margin:0;font-weight:700;font-size:20px}
     .header-sub{font-size:13px;opacity:.95;margin-top:6px}
     .kpi-row{display:flex;gap:10px;align-items:center}
-    .kpi{background:var(--panel-bg);padding:10px 12px;border-radius:10px;min-width:140px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 4px 12px rgba(2,6,23,0.04)}
-    .kpi .title{font-size:12px;color:var(--muted);font-weight:700}
-    .kpi .val{font-weight:700;font-size:18px;margin-top:6px}
+    .kpi{background:var(--panel-bg);padding:12px 14px;border-radius:10px;min-width:160px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 4px 12px rgba(2,6,23,0.04)}
+    .kpi .title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+    .kpi .val{font-weight:700;font-size:20px;margin-top:4px;color:#0b1220}
+    .kpi .small-muted{font-size:11px;color:var(--muted);margin-top:4px}
     /* panels */
     .panel{background:var(--panel-bg);border-radius:10px;padding:12px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.04)}
     .panel h6{margin:0 0 10px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:8px;font-size:15px}
@@ -49,13 +50,25 @@
     <!-- Header -->
     <div class="header">
       <div class="header-left">
-        <h4>HiLabs — HiView: Regional Coverage Intelligence</h4>
+        <h4>HiLabs | Risk & Rate Intelligence Platform</h4>
         <div class="header-sub">User: Maria Santos — Regional Network Manager (Mid-Atlantic)</div>
       </div>
       <div class="kpi-row" aria-hidden="false">
-        <div class="kpi"><div class="title">Coverage Adequacy</div><div class="val" id="kpi-adequacy">94%</div><div class="small-muted">Target 95%</div></div>
-        <div class="kpi"><div class="title">Total Providers</div><div class="val" id="kpi-providers">1,245</div><div class="small-muted">In-region</div></div>
-        <div class="kpi"><div class="title">Potential Savings</div><div class="val" id="kpi-savings">$3.4M</div><div class="small-muted">Negotiation targets</div></div>
+        <div class="kpi">
+          <div class="title">Coverage Adequacy</div>
+          <div class="val" id="kpi-adequacy">94%</div>
+          <div class="small-muted">Target 95%</div>
+        </div>
+        <div class="kpi">
+          <div class="title">Total Providers</div>
+          <div class="val" id="kpi-providers">1,245</div>
+          <div class="small-muted">In-region</div>
+        </div>
+        <div class="kpi">
+          <div class="title">Potential Savings</div>
+          <div class="val" id="kpi-savings">$3.4M</div>
+          <div class="small-muted">Negotiation targets</div>
+        </div>
       </div>
     </div>
 
@@ -366,6 +379,7 @@
       document.getElementById('pot-savings').innerText = `$${v.leakage}M`;
       document.getElementById('rate-variance').innerText = v.pos;
       document.getElementById('kpi-providers').innerText = v.providers.toLocaleString();
+      document.getElementById('kpi-savings').innerText = `$${v.leakage}M`;
       document.getElementById('active-providers').innerText = v.providers.toLocaleString();
       // adequacy change heuristic: better coverage -> +1 or -1
       const baseAdequacy = Math.round(counties.reduce((s,c)=>s+c.adequacy,0)/counties.length);
