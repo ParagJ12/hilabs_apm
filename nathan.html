@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HiLabs — Nathan (Contract Negotiation)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --hi-blue:#2c6aef; --accent:#2c6aef; --panel-bg:#ffffff; --muted:#6b7280; --bg:#f8f9fa;
+    }
+    html,body{height:100%;margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:var(--bg);color:#0b1220}
+    .container{max-width:1400px;margin:0 auto;padding:16px;}
+    
+    /* Header */
+    .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:16px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 4px 12px rgba(44,106,239,0.15)}
+    .header-left h4{margin:0;font-weight:700;font-size:22px}
+    .header-sub{font-size:13px;opacity:.9;margin-top:4px}
+    
+    /* KPI Cards */
+    .kpi-row{display:flex;gap:12px;align-items:stretch}
+    .kpi{background:var(--panel-bg);padding:16px 20px;border-radius:10px;min-width:150px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.06);flex:1}
+    .kpi .title{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .kpi .val{font-weight:700;font-size:28px;color:#0b1220;line-height:1.2}
+    .kpi .small-muted{font-size:12px;color:var(--muted);margin-top:6px}
+    
+    /* Panels */
+    .panel{background:var(--panel-bg);border-radius:10px;padding:20px;border-left:4px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:20px}
+    .panel h6{margin:0 0 16px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:10px;font-size:16px}
+    .small-muted{color:var(--muted);font-size:13px}
+    
+    /* Provider Card */
+    .provider-card{border:2px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:12px;cursor:pointer;transition:all 0.2s}
+    .provider-card:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(44,106,239,0.1)}
+    .provider-card.selected{border-color:var(--accent);background:#f0f7ff}
+    
+    /* Simulation Controls */
+    .sim-controls{background:#f9fafb;padding:16px;border-radius:8px;margin-bottom:16px}
+    .slider-container{margin:16px 0}
+    .slider-value{font-size:24px;font-weight:700;color:var(--accent);text-align:center;margin:8px 0}
+    
+    /* Stats Grid */
+    .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+    .stat-item{text-align:center;padding:12px;background:#f9fafb;border-radius:6px}
+    .stat-item .label{font-size:12px;color:var(--muted);margin-bottom:4px}
+    .stat-item .value{font-size:18px;font-weight:700}
+    
+    /* Chart containers */
+    .chart-box{height:250px;margin-bottom:16px}
+    
+    /* Tables */
+    .table-container{max-height:300px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px}
+    .table{margin:0}
+    .table thead th{background:var(--accent);color:#fff;position:sticky;top:0;z-index:10;font-weight:600;font-size:13px;padding:12px 10px;border:none}
+    .table tbody td{padding:10px;font-size:13px;border-bottom:1px solid #f3f4f6}
+    .table tbody tr:hover{background:#f9fafb;cursor:pointer}
+    
+    /* Alerts */
+    .alert-item{padding:12px;border-left:4px solid;border-radius:6px;margin-bottom:10px;font-size:13px}
+    .alert-critical{background:#fff1f2;border-color:#dc2626}
+    .alert-warning{background:#fffbeb;border-color:#f59e0b}
+    .alert-success{background:#ecfdf5;border-color:#10b981}
+    .alert-info{background:#eff6ff;border-color:#3b82f6}
+    
+    /* Buttons */
+    .btn-compact{padding:8px 16px;font-size:13px;font-weight:600}
+    
+    /* Timeline */
+    .timeline{position:relative;padding-left:30px}
+    .timeline-item{position:relative;padding-bottom:20px}
+    .timeline-item:before{content:'';position:absolute;left:-30px;top:0;width:16px;height:16px;border-radius:50%;border:3px solid var(--accent);background:#fff}
+    .timeline-item:after{content:'';position:absolute;left:-24px;top:16px;width:2px;height:calc(100% - 16px);background:#e5e7eb}
+    .timeline-item:last-child:after{display:none}
+    
+    /* Badge */
+    .badge{padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600}
+    .badge-urgent{background:#fee2e2;color:#991b1b}
+    .badge-upcoming{background:#fef3c7;color:#92400e}
+    .badge-success{background:#d1fae5;color:#065f46}
+    
+    /* Responsive */
+    @media (max-width:1200px){
+      .kpi-row{flex-wrap:wrap}
+      .kpi{min-width:140px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <h4>HiLabs | Risk & Rate Intelligence Platform</h4>
+        <div class="header-sub">User: Nathan Rivera — Contract Negotiation Analyst</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="title">Active Negotiations</div>
+          <div class="val">8</div>
+          <div class="small-muted">In progress</div>
+        </div>
+        <div class="kpi">
+          <div class="title">Savings Opportunity</div>
+          <div class="val">$12.4M</div>
+          <div class="small-muted">Total potential</div>
+        </div>
+        <div class="kpi">
+          <div class="title">Success Rate</div>
+          <div class="val">73%</div>
+          <div class="small-muted">Last 12 months</div>
+        </div>
+        <div class="kpi">
+          <div class="title">Expiring Soon</div>
+          <div class="val">14</div>
+          <div class="small-muted">Next 90 days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="row g-3">
+      <!-- Left Column (40%) -->
+      <div class="col-lg-5">
+        <!-- Provider Search -->
+        <div class="panel">
+          <h6>Provider Performance Panel</h6>
+          <div class="input-group mb-3">
+            <input type="text" id="provider-search" class="form-control" placeholder="Search by NPI, Name, or Specialty...">
+            <button class="btn btn-primary" id="search-btn">Search</button>
+          </div>
+          
+          <div id="provider-cards">
+            <div class="provider-card" data-provider="metro-cardio">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <div style="font-weight:700;font-size:15px">Metro Cardiology Group</div>
+                  <div class="small-muted">Cardiology • NPI: 1234567890</div>
+                </div>
+                <span class="badge badge-urgent">High Priority</span>
+              </div>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="label">Current Rate</div>
+                  <div class="value">$420</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Market Percentile</div>
+                  <div class="value">75th</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Quality Score</div>
+                  <div class="value">92/100</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Savings Opp.</div>
+                  <div class="value">$240K</div>
+                </div>
+              </div>
+              <div class="mt-2" style="font-size:13px;color:#dc2626;font-weight:600">
+                Currently 12% above market → Potential savings $240K
+              </div>
+            </div>
+
+            <div class="provider-card" data-provider="valley-rad">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <div style="font-weight:700;font-size:15px">Valley Radiology Center</div>
+                  <div class="small-muted">Radiology • NPI: 9876543210</div>
+                </div>
+                <span class="badge badge-upcoming">Monitor</span>
+              </div>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="label">Current Rate</div>
+                  <div class="value">$520</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Market Percentile</div>
+                  <div class="value">82nd</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Quality Score</div>
+                  <div class="value">88/100</div>
+                </div>
+                <div class="stat-item">
+                  <div class="label">Savings Opp.</div>
+                  <div class="value">$180K</div>
+                </div>
+              </div>
+              <div class="mt-2" style="font-size:13px;color:#f59e0b;font-weight:600">
+                Currently 9% above market → Potential savings $180K
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contract Pipeline -->
+        <div class="panel">
+          <h6>Contract Renewal Pipeline (Next 180 Days)</h6>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div style="font-weight:700">Metro Cardiology Group</div>
+                  <div class="small-muted">Cardiology • Expires Dec 22, 2025</div>
+                  <div style="font-size:13px;margin-top:4px">Contract Value: $2.4M</div>
+                </div>
+                <span class="badge badge-urgent">🔴 URGENT</span>
+              </div>
+              <button class="btn btn-primary btn-compact mt-2">Start Negotiation</button>
+            </div>
+
+            <div class="timeline-item">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div style="font-weight:700">Dr. Sarah Kim</div>
+                  <div class="small-muted">Orthopedics • Expires Dec 15, 2025</div>
+                  <div style="font-size:13px;margin-top:4px">Contract Value: $480K</div>
+                </div>
+                <span class="badge badge-urgent">🔴 URGENT</span>
+              </div>
+              <button class="btn btn-outline-primary btn-compact mt-2">Schedule Meeting</button>
+            </div>
+
+            <div class="timeline-item">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div style="font-weight:700">Northeast Health System</div>
+                  <div class="small-muted">Multi-Specialty • Expires Jan 15, 2026</div>
+                  <div style="font-size:13px;margin-top:4px">Contract Value: $8.2M</div>
+                </div>
+                <span class="badge badge-upcoming">🟡 UPCOMING</span>
+              </div>
+              <button class="btn btn-outline-secondary btn-compact mt-2">Draft Proposal</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Negotiation History -->
+        <div class="panel">
+          <h6>Recent Negotiation History</h6>
+          <div class="table-container">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Provider</th>
+                  <th>Proposed</th>
+                  <th>Final</th>
+                  <th>Outcome</th>
+                  <th>Savings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600">Metro Cardiology</td>
+                  <td>-8%</td>
+                  <td>-5%</td>
+                  <td>✅ SUCCESS</td>
+                  <td>$1.2M</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Dr. Lisa Chen</td>
+                  <td>-10%</td>
+                  <td>0%</td>
+                  <td>❌ FAILED</td>
+                  <td>$0</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Valley Radiology</td>
+                  <td>-6%</td>
+                  <td>-6%</td>
+                  <td>✅ SUCCESS</td>
+                  <td>$380K</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Northeast Health</td>
+                  <td>-12%</td>
+                  <td>-8%</td>
+                  <td>⚠️ PARTIAL</td>
+                  <td>$4.8M</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-3">
+            <div class="small-muted">Success Rate by Specialty:</div>
+            <div style="font-size:13px;margin-top:8px">
+              Cardiology: 68% (12/18) | Orthopedics: 80% (8/10) | Primary Care: 85% (17/20)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Column (35%) -->
+      <div class="col-lg-4">
+        <!-- Simulation Lab -->
+        <div class="panel">
+          <h6>Contract Simulation Lab</h6>
+          <div class="sim-controls">
+            <label class="small-muted">Provider: Metro Cardiology Group</label>
+            <div class="mt-2 mb-2">
+              <label class="small-muted">Proposed Rate Cut (%)</label>
+              <input type="range" class="form-range" id="rate-slider" min="-15" max="5" value="-8" step="1">
+              <div class="slider-value" id="slider-display">-8%</div>
+            </div>
+            <div class="row text-center">
+              <div class="col-6">
+                <div class="small-muted">Current Rate</div>
+                <div style="font-weight:700;font-size:18px">$420</div>
+              </div>
+              <div class="col-6">
+                <div class="small-muted">Proposed Rate</div>
+                <div style="font-weight:700;font-size:18px;color:var(--accent)" id="proposed-rate">$387</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-box" id="savings-chart"></div>
+          <div class="chart-box" id="exit-chart"></div>
+
+          <div style="background:#f9fafb;padding:12px;border-radius:6px;margin-top:16px">
+            <div style="font-weight:700;margin-bottom:8px">Scenario Comparison</div>
+            <table class="table table-sm mb-0">
+              <thead>
+                <tr>
+                  <th>Scenario</th>
+                  <th>Cut</th>
+                  <th>Savings</th>
+                  <th>Exit Risk</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>A (Aggressive)</td>
+                  <td>-8%</td>
+                  <td>$5.7M</td>
+                  <td>18%</td>
+                </tr>
+                <tr style="background:#e0f2fe">
+                  <td>B (Balanced)</td>
+                  <td>-5%</td>
+                  <td>$3.2M</td>
+                  <td>8%</td>
+                </tr>
+                <tr>
+                  <td>C (Conservative)</td>
+                  <td>-3%</td>
+                  <td>$1.8M</td>
+                  <td>2%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-info mt-3" style="font-size:13px">
+            <strong>Recommendation:</strong> Optimal approach is 6% cut with multi-year contract. Expected savings: $4.2M, Exit risk: 12%
+          </div>
+        </div>
+
+        <!-- Member Impact -->
+        <div class="panel">
+          <h6>Member Impact Analysis</h6>
+          <div class="alert alert-danger" style="font-size:13px">
+            <strong>🔴 CRITICAL IMPACT if provider exits:</strong><br>
+            • 2,480 members lose in-network access<br>
+            • Average travel distance: +18 miles<br>
+            • Network adequacy: 92% → 84% (below CMS threshold)
+          </div>
+
+          <div style="font-weight:700;margin-bottom:12px">Alternative Providers:</div>
+          <div style="font-size:13px;line-height:1.8">
+            1. Valley Cardiology (+12 mi, 40% capacity)<br>
+            2. Northeast Heart (+18 mi, 30% capacity)<br>
+            3. Dr. Sarah Kim (+9 mi, 10% capacity)<br>
+            <br>
+            <strong>Coverage Gap:</strong> 20% of members (496) have NO alternative within 30 miles
+          </div>
+
+          <div style="background:#fff1f2;padding:12px;border-radius:6px;margin-top:16px;font-size:13px">
+            <strong>Cost of Provider Exit:</strong><br>
+            Recruitment: $80K-120K | Gap Cost: $1.2M | CMS Penalty Risk: $2.8M
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column (25%) -->
+      <div class="col-lg-3">
+        <!-- Benchmark Insights -->
+        <div class="panel">
+          <h6>Benchmark Insights</h6>
+          <div class="chart-box" id="benchmark-chart"></div>
+          
+          <div class="table-container" style="max-height:200px">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Payer</th>
+                  <th>Rate</th>
+                  <th>vs Market</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#fff1f2">
+                  <td><strong>Your Network</strong></td>
+                  <td>$420</td>
+                  <td>+12%</td>
+                </tr>
+                <tr>
+                  <td>Aetna</td>
+                  <td>$385</td>
+                  <td>+2%</td>
+                </tr>
+                <tr>
+                  <td>UnitedHealth</td>
+                  <td>$395</td>
+                  <td>+5%</td>
+                </tr>
+                <tr>
+                  <td>Cigna</td>
+                  <td>$375</td>
+                  <td>-1%</td>
+                </tr>
+                <tr>
+                  <td>Medicare</td>
+                  <td>$298</td>
+                  <td>-21%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button class="btn btn-primary btn-compact w-100 mt-3">Download Negotiation Packet</button>
+        </div>
+
+        <!-- Competitive Intelligence -->
+        <div class="panel">
+          <h6>Competitive Intelligence</h6>
+          <div style="font-size:13px;line-height:1.8">
+            <strong>Leverage Points:</strong><br>
+            ✅ Aetna pays $385 (8% less)<br>
+            ✅ Market median: $378 (10% less)<br>
+            ⚠️ UHC raised rates +2% recently<br>
+            <br>
+            <strong>Provider Networks:</strong><br>
+            In-network with: Aetna, UHC, Cigna<br>
+            Your revenue share: 22%<br>
+            <br>
+            <span style="background:#fef3c7;padding:4px 8px;border-radius:4px;font-weight:600">Leverage: 🟡 MODERATE</span>
+          </div>
+        </div>
+
+        <!-- Provider Financial Health -->
+        <div class="panel">
+          <h6>Provider Financial Health</h6>
+          <div class="text-center mb-3">
+            <div style="font-size:36px;font-weight:700;color:#f59e0b">72/100</div>
+            <div class="small-muted">🟡 Moderate Risk</div>
+          </div>
+
+          <div style="font-size:13px;line-height:1.8">
+            <strong>Key Metrics:</strong><br>
+            Revenue: $11.2M (↑ 5% YoY)<br>
+            Margin: 8.5% (Industry: 12%)<br>
+            Debt-to-Equity: 0.42 (Healthy)<br>
+            <br>
+            <strong>Exit Risk:</strong><br>
+            8% cut: 18% probability<br>
+            5% cut: 8% probability<br>
+            3% cut: 2% probability<br>
+            <br>
+            <div style="background:#ecfdf5;padding:8px;border-radius:4px;margin-top:8px">
+              <strong>Recommendation:</strong> Provider can absorb 4-5% cut without financial distress
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts Panel (Full Width) -->
+    <div class="panel">
+      <h6>Market Intelligence & Alerts</h6>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="alert-item alert-critical">
+            <strong>🔴 URGENT:</strong> Provider X recently merged with Regional Health Group – increased rate pressure expected next quarter
+          </div>
+          <div class="alert-item alert-warning">
+            <strong>🟡 WARNING:</strong> Provider Y flagged as high-cost/low-quality — prioritize renegotiation
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="alert-item alert-success">
+            <strong>🟢 OPPORTUNITY:</strong> Medicare published new fee schedule - 15 providers now above benchmark
+          </div>
+          <div class="alert-item alert-info">
+            <strong>🔵 INFO:</strong> Industry report: Average cardiology rates increased 3.2% in Q3
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="small-muted text-center" style="margin-top:20px;padding:12px">
+      Prototype (synthetic data) — HiLabs 2025 • No PHI • Last updated: Nov 2025
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.24.0/plotly.min.js"></script>
+
+  <script>
+    // Rate slider functionality
+    const slider = document.getElementById('rate-slider');
+    const sliderDisplay = document.getElementById('slider-display');
+    const proposedRate = document.getElementById('proposed-rate');
+    const currentRate = 420;
+
+    slider.addEventListener('input', function() {
+      const cut = parseInt(this.value);
+      sliderDisplay.innerText = (cut > 0 ? '+' : '') + cut + '%';
+      const newRate = Math.round(currentRate * (1 + cut/100));
+      proposedRate.innerText = '$' + newRate;
+      updateCharts(cut);
+    });
+
+    // Provider card selection
+    document.querySelectorAll('.provider-card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.provider-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+
+    // Charts
+    function updateCharts(cut) {
+      // Savings chart
+      const years = ['Year 1', 'Year 2', 'Year 3'];
+      const savings = years.map((_, i) => Math.abs(cut) * 0.6 * (1 + i * 0.05));
+      Plotly.newPlot('savings-chart', [{
+        x: years,
+        y: savings,
+        type: 'bar',
+        marker: {color: '#2c6aef'},
+        text: savings.map(s => '$' + s.toFixed(1) + 'M'),
+        textposition: 'auto'
+      }], {
+        margin: {t: 30, l: 40, r: 20, b: 40},
+        title: {text: 'Projected Savings', font: {size: 14}},
+        yaxis: {title: 'Savings ($M)'}
+      }, {displayModeBar: false, responsive: true});
+
+      // Exit risk chart
+      const cutLevels = [-15, -12, -10, -8, -6, -5, -3, 0, 3, 5];
+      const exitRisk = cutLevels.map(c => Math.max(0, Math.min(100, Math.abs(c) * 2.5 - 2)));
+      Plotly.newPlot('exit-chart', [{
+        x: cutLevels,
+        y: exitRisk,
+        mode: 'lines+markers',
+        line: {color: '#ef4444', width: 3},
+        marker: {size: 8}
+      }], {
+        margin: {t: 30, l: 40, r: 20, b: 40},
+        title: {text: 'Exit Probability', font: {size: 14}},
+        xaxis: {title: 'Rate Change (%)'},
+        yaxis: {title: 'Exit Risk (%)'}
+      }, {displayModeBar: false, responsive: true});
+    }
+
+    // Benchmark chart
+    const payers = ['Your Network', 'Aetna', 'UnitedHealth', 'Cigna', 'Anthem', 'Medicare'];
+    const rates = [420, 385, 395, 375, 390, 298];
+    const colors = rates.map(r => r > 400 ? '#ef4444' : (r > 380 ? '#f59e0b' : '#10b981'));
+    
+    Plotly.newPlot('benchmark-chart', [{
+      x: payers,
+      y: rates,
+      type: 'bar',
+      marker: {color: colors},
+      text: rates.map(r => '$' + r),
+      textposition: 'auto'
+    }], {
+      margin: {t: 30, l: 40, r: 20, b: 80},
+      title: {text: 'Rate Comparison (CPT 99213)', font: {size: 14}},
+      yaxis: {title: 'Rate ($)'},
+      xaxis: {tickangle: -45}
+    }, {displayModeBar: false, responsive: true});
+
+    // Initialize charts
+    updateCharts(-8);
+  </script>
+</body>
+</html>
