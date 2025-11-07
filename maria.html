@@ -11,60 +11,50 @@
       --hi-blue:#2c6aef; --accent:#2c6aef; --panel-bg:#ffffff; --muted:#6b7280; --bg:#f6f8fb;
     }
     html,body{height:100%;margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:var(--bg);color:#0b1220}
-    .container{max-width:1320px;margin:8px auto;padding:0 8px;} /* tightened margins */
+    .container{max-width:1320px;margin:18px auto;padding:0 12px;}
     /* Header */
-    .header{background:var(--hi-blue);color:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(44,106,239,0.10)}
-    .header-left h4{margin:0;font-weight:700;font-size:17px}
-    .header-sub{font-size:12.5px;opacity:.95;margin-top:4px}
-    .kpi-row{display:flex;gap:8px;align-items:center}
-    .kpi{background:var(--panel-bg);padding:8px 10px;border-radius:8px;min-width:140px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 4px 10px rgba(2,6,23,0.04)}
-    .kpi .title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px}
-    .kpi .val{font-weight:700;font-size:16px;margin-top:2px;color:#0b1220}
+    .header{background:var(--hi-blue);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(44,106,239,0.12)}
+    .header-left h4{margin:0;font-weight:700;font-size:20px}
+    .header-sub{font-size:13px;opacity:.95;margin-top:6px}
+    .kpi-row{display:flex;gap:12px;align-items:center}
+    .kpi{background:var(--panel-bg);padding:12px 14px;border-radius:10px;min-width:160px;text-align:center;border-left:4px solid var(--accent);box-shadow:0 4px 12px rgba(2,6,23,0.04)}
+    .kpi .title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+    .kpi .val{font-weight:700;font-size:20px;margin-top:4px;color:#0b1220}
     .kpi .small-muted{font-size:11px;color:var(--muted);margin-top:4px}
     /* panels */
-    .panel{background:var(--panel-bg);border-radius:8px;padding:10px;border-left:3px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.04);display:flex;flex-direction:column;gap:8px}
-    .panel h6{margin:0 0 6px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:6px;font-size:14.5px}
+    .panel{background:var(--panel-bg);border-radius:10px;padding:14px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.04);display:flex;flex-direction:column}
+    .panel h6{margin:0 0 10px 0;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:8px;font-size:15px}
     .small-muted{color:var(--muted);font-size:13px}
     /* layout grid tweaks */
-    .row-gap{row-gap:8px}
+    .row-gap{row-gap:14px}
     /* map */
-    #map{height:260px;border-radius:8px;border:1px solid #e7eefb;position:relative}
-    .map-legend{position:absolute;right:10px;top:10px;background:rgba(255,255,255,0.98);padding:6px 8px;border-radius:8px;border-left:3px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.06);font-size:12.5px;min-width:180px;z-index:1000}
+    #map{height:320px;border-radius:8px;border:1px solid #e7eefb;position:relative}
+    .map-legend{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.98);padding:8px 10px;border-radius:8px;border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.06);font-size:13px;min-width:200px;z-index:1000}
     .legend-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-    .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+    .sw{width:14px;height:14px;border-radius:3px;display:inline-block}
     /* table + scroll */
-    .scroll-table{max-height:220px;overflow:auto;padding-right:6px}
+    .scroll-table{max-height:300px;overflow:auto;padding-right:6px}
     .table thead th{background:var(--accent);color:#fff;position:sticky;top:0;z-index:1;font-weight:700}
     .btn-compact{padding:6px 10px;font-size:13px}
-    /* chat / AI */
-    .chat-box{max-height:140px;overflow:auto;padding:6px;border-radius:6px;background:#fff;border:1px solid #eef2ff}
-    .chat-row{margin-bottom:6px}
-    .chat-user{ text-align:right }
-    .chat-assistant{ text-align:left }
-    .chat-bubble{ display:inline-block; max-width:86%; padding:6px 8px; border-radius:8px; border:1px solid #eef2ff; background:#fff; font-size:13px }
-    .insights-list{max-height:110px; overflow:auto; padding:6px; background:#fff; border:1px solid #eef2ff; border-radius:6px}
     /* modal */
     .modal-body pre{white-space:pre-wrap}
-    /* remove forced equal height (was creating large empty spaces) */
-    /* (previous rule removed intentionally) */
-    /* remove extra bottom spacer (was previously a height div) */
-    .no-spacer{margin-bottom:0;padding-bottom:0}
-    /* reduce margins from bootstrap-like elements */
-    .mb-2{margin-bottom:.5rem !important;}
-    .mb-3{margin-bottom:.75rem !important;}
-    .mt-1{margin-top:.25rem !important;}
-    .mt-2{margin-top:.5rem !important;}
-    .mt-3{margin-top:.75rem !important;}
-    /* responsive tweaks */
+    /* equal-height panels per row */
+    .row-equal > .col-lg-4 > .panel,
+    .row-equal > .col-lg-5 > .panel,
+    .row-equal > .col-lg-6 > .panel,
+    .row-equal > .col-lg-7 > .panel,
+    .row-equal > .col-lg-8 > .panel {
+      height:100%;
+    }
+    /* clean spacing, responsive */
     @media (max-width:1199px){
       .container{max-width:1000px}
-      #map{height:240px}
     }
     @media (max-width:991px){
-      .kpi-row{overflow:auto;padding-bottom:4px}
-      #map{height:220px}
+      .kpi-row{overflow:auto;padding-bottom:6px}
+      #map{height:260px}
       .panel h6{font-size:14px}
-      .map-legend{right:8px;left:auto;top:8px;min-width:150px}
+      .map-legend{right:8px;left:auto;top:8px;min-width:170px}
     }
   </style>
 </head>
@@ -97,39 +87,28 @@
     </div>
 
     <!-- top controls + map -->
-    <div class="row row-gap g-2">
+    <div class="row row-gap row-equal">
       <div class="col-lg-8">
         <div class="panel">
-          <div class="d-flex flex-wrap gap-2 align-items-end mb-2">
-            <div style="min-width:140px">
+          <div class="d-flex flex-wrap gap-2 align-items-end mb-3">
+            <div style="min-width:160px">
               <label class="small-muted">Type</label>
               <select id="type-filter" class="form-select form-select-sm">
                 <option>Health</option><option>Life</option><option>Auto</option>
               </select>
             </div>
-            <div style="min-width:140px">
+            <div style="min-width:160px">
               <label class="small-muted">Coverage Level</label>
               <select id="coverage-filter" class="form-select form-select-sm">
                 <option>Basic</option><option selected>Standard</option><option>Premium</option><option>Comprehensive</option>
               </select>
             </div>
-            <div style="min-width:140px">
+            <div style="min-width:160px">
               <label class="small-muted">Date Range</label>
               <select id="date-range" class="form-select form-select-sm">
                 <option>Last 30 days</option><option selected>Last Quarter</option><option>Last 12 months</option><option>Custom</option>
               </select>
             </div>
-
-            <!-- AI quick controls (compact) -->
-            <div style="min-width:170px">
-              <label class="small-muted">AI Quick</label>
-              <div class="d-flex gap-1">
-                <button id="run-scan" class="btn btn-outline-success btn-compact" title="Run AI quick scan">AI Scan</button>
-                <button id="refresh-insights" class="btn btn-outline-primary btn-compact" title="Refresh insights">Insights</button>
-                <button id="export-insights" class="btn btn-outline-secondary btn-compact" title="Export insights">Export</button>
-              </div>
-            </div>
-
             <div class="ms-auto d-flex gap-2">
               <button id="refresh-btn" class="btn btn-primary btn-compact">Refresh</button>
               <button id="export-btn" class="btn btn-outline-secondary btn-compact">Export</button>
@@ -139,37 +118,37 @@
           <div class="d-flex gap-3 align-items-start">
             <div style="flex:1">
               <h6>Current Coverage Status — Mid-Atlantic</h6>
-              <div class="row gx-2">
+              <div class="row gx-3">
                 <div class="col-md-4 col-6 mb-2">
                   <div class="small-muted">Total Active Providers</div>
-                  <div style="font-weight:700;font-size:15px" id="active-providers">1,245</div>
+                  <div style="font-weight:700;font-size:16px" id="active-providers">1,245</div>
                 </div>
                 <div class="col-md-4 col-6 mb-2">
                   <div class="small-muted">Average Member Access Distance</div>
-                  <div style="font-weight:700;font-size:15px" id="avg-dist">12.5 miles</div>
+                  <div style="font-weight:700;font-size:16px" id="avg-dist">12.5 miles</div>
                 </div>
                 <div class="col-md-4 col-6 mb-2">
                   <div class="small-muted">Counties Below Threshold</div>
-                  <div style="font-weight:700;font-size:15px" id="below-counties">3</div>
+                  <div style="font-weight:700;font-size:16px" id="below-counties">3</div>
                 </div>
               </div>
-              <div class="mt-1">
+              <div class="mt-2">
                 <div class="small-muted">Utilization</div>
-                <div style="font-weight:700;font-size:15px" id="util">89%</div>
+                <div style="font-weight:700;font-size:16px" id="util">89%</div>
               </div>
             </div>
 
             <div style="width:320px; min-width:220px;">
               <div class="small-muted mb-2">Compliance</div>
               <div class="d-flex gap-2">
-                <div style="flex:1;background:#ecfdf5;border-radius:8px;padding:8px"><div style="font-weight:700;color:#059669">Green</div><div class="small-muted">Compliant</div></div>
-                <div style="flex:1;background:#fffbeb;border-radius:8px;padding:8px"><div style="font-weight:700;color:#b45309">Yellow</div><div class="small-muted">At Risk</div></div>
-                <div style="flex:1;background:#fff1f2;border-radius:8px;padding:8px"><div style="font-weight:700;color:#b91c1c">Red</div><div class="small-muted">Non-compliant</div></div>
+                <div style="flex:1;background:#ecfdf5;border-radius:8px;padding:10px"><div style="font-weight:700;color:#059669">Green</div><div class="small-muted">Compliant</div></div>
+                <div style="flex:1;background:#fffbeb;border-radius:8px;padding:10px"><div style="font-weight:700;color:#b45309">Yellow</div><div class="small-muted">At Risk</div></div>
+                <div style="flex:1;background:#fff1f2;border-radius:8px;padding:10px"><div style="font-weight:700;color:#b91c1c">Red</div><div class="small-muted">Non-compliant</div></div>
               </div>
             </div>
           </div>
 
-          <div class="small-muted">Tip: Use filters above to update KPIs and map. Click a county on the map to filter providers.</div>
+          <div style="margin-top:12px" class="small-muted">Tip: Use filters above to update KPIs and map. Click a county on the map to filter providers.</div>
         </div>
       </div>
 
@@ -177,46 +156,12 @@
         <div class="panel h-100">
           <h6>Regional Adequacy Map</h6>
           <div id="map" class="mb-0"></div>
-
-          <!-- compact AI Assistant + predictor below the map (kept inside panel to avoid layout shift) -->
-          <div style="margin-top:8px; display:flex; gap:8px; align-items:flex-start;">
-            <div style="flex:1; min-width:160px;">
-              <label class="small-muted">AI Assistant</label>
-              <div class="chat-box" id="chat-box"></div>
-              <div style="display:flex;gap:6px;margin-top:6px;">
-                <input id="chat-input" class="form-control form-control-sm" placeholder="Ask: Which county is highest risk?" />
-                <button id="chat-send" class="btn btn-sm btn-primary">Send</button>
-              </div>
-            </div>
-
-            <div style="width:170px; min-width:150px;">
-              <label class="small-muted">Predictor</label>
-              <div style="display:flex;gap:6px;align-items:center;">
-                <select id="pred-metric" class="form-select form-select-sm" style="width:100%;">
-                  <option value="adequacy">Adequacy %</option>
-                  <option value="providers">Providers</option>
-                  <option value="savings">Potential Savings (M)</option>
-                </select>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:6px;">
-                <input id="pred-months" type="number" min="6" max="36" value="12" class="form-control form-control-sm" style="width:70px" />
-                <button id="pred-run" class="btn btn-sm btn-outline-primary">Run</button>
-              </div>
-              <div id="pred-summary" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
-            </div>
-          </div>
-
-          <!-- Insights feed -->
-          <div>
-            <label class="small-muted">AI Domain Insights</label>
-            <div class="insights-list" id="insights-feed" style="margin-top:6px"></div>
-          </div>
         </div>
       </div>
     </div>
 
     <!-- provider table + goals -->
-    <div class="row row-gap g-2" style="align-items:start;">
+    <div class="row row-gap" style="align-items:start;">
       <div class="col-lg-7">
         <div class="panel">
           <h6>Provider Network Details</h6>
@@ -240,19 +185,19 @@
       <div class="col-lg-5">
         <div class="panel">
           <h6>Goals & Compliance</h6>
-          <div class="mb-2">
+          <div class="mb-3">
             <div class="small-muted">Adequacy Target</div>
-            <div style="font-weight:700;font-size:16px">95% by Q4</div>
+            <div style="font-weight:700;font-size:18px">95% by Q4</div>
             <div class="progress mt-2 mb-2"><div class="progress-bar" id="goal-progress" role="progressbar" style="width:94%">94%</div></div>
           </div>
 
-          <div class="mb-2">
+          <div class="mb-3">
             <div class="small-muted">Counties Needing Action</div>
-            <ul id="action-list" style="margin-top:8px;padding-left:18px"></ul>
+            <ul id="action-list" style="margin-top:8px"></ul>
           </div>
 
           <h6 style="margin-top:6px">Cost Management</h6>
-          <div class="d-flex gap-2">
+          <div class="d-flex gap-3">
             <div style="flex:1">
               <div class="small-muted">Regional Spend (Q3)</div><div style="font-weight:700" id="spend">$82.4M</div>
               <div class="small-muted mt-2">Rate Variance vs Market</div><div style="font-weight:700" id="rate-variance">+5.8%</div>
@@ -263,7 +208,7 @@
             </div>
           </div>
 
-          <div class="mt-2 d-flex gap-2">
+          <div class="mt-3 d-flex gap-2">
             <button id="run-audit" class="btn btn-primary btn-compact">Run Adequacy Audit</button>
             <button id="download-report" class="btn btn-outline-secondary btn-compact">Download Gap Report</button>
           </div>
@@ -272,11 +217,11 @@
     </div>
 
     <!-- trend + quick actions -->
-    <div class="row row-gap g-2" style="align-items:start;">
+    <div class="row row-gap" style="align-items:start;">
       <div class="col-lg-8">
         <div class="panel">
           <h6>Budget vs Actual & Rate Trends</h6>
-          <div id="trend-plot" style="height:260px"></div>
+          <div id="trend-plot" style="height:320px"></div>
         </div>
       </div>
       <div class="col-lg-4">
@@ -287,12 +232,106 @@
             <button class="btn btn-outline-warning">Flag Provider for Re-contract</button>
             <button class="btn btn-outline-success">Push Telehealth Expansion</button>
           </div>
-          <div class="mt-2 small-muted">Actions are mock/stubbed for the demo.</div>
+          <div class="mt-3 small-muted">Actions are mock/stubbed for the demo.</div>
         </div>
       </div>
     </div>
 
-    <div class="small-muted text-center mb-2">Prototype (synthetic data) — HiLabs 2025 • No PHI • Last updated: Nov 2025</div>
+
+    <!-- AI Features Section -->
+    <div class="row row-gap" style="align-items:start;">
+      <div class="col-lg-6">
+        <div class="panel">
+          <h6>🤖 AI Risk Scoring</h6>
+          <div class="mb-3">
+            <div class="small-muted">Automated Provider Risk Assessment</div>
+            <div style="font-size:14px; margin-top:8px; line-height:1.6;">
+              <div style="background:#f0f9ff; padding:10px; border-radius:6px; margin-bottom:8px;">
+                <strong>High Risk:</strong> Allegheny Cardio (Concentration + 12% overcharge)<br/>
+                <strong>Medium Risk:</strong> Somerset Ortho (Potential exit risk)<br/>
+                <strong>Monitor:</strong> Lancaster Surgical (Trending +3% YoY)
+              </div>
+            </div>
+            <button id="ai-risk-details" class="btn btn-outline-primary btn-compact mt-2">View ML Model Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="panel">
+          <h6>⚡ Anomaly Alerts</h6>
+          <div class="mb-3">
+            <div class="small-muted">Real-time Outlier Detection</div>
+            <div style="font-size:14px; margin-top:8px; line-height:1.6;">
+              <div style="background:#fef2f2; padding:10px; border-radius:6px; margin-bottom:8px;">
+                🔴 <strong>Critical:</strong> Harford claim denial rate spike (+2.3% vs baseline)<br/>
+                🟡 <strong>Warning:</strong> York member access time increased to 14.2 miles<br/>
+                🟢 <strong>Info:</strong> Cambria utilization improved to 96%
+              </div>
+            </div>
+            <button id="ai-anomaly-config" class="btn btn-outline-primary btn-compact mt-2">Configure Thresholds</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Predictive Insights & Recommendations -->
+    <div class="row row-gap" style="align-items:start;">
+      <div class="col-lg-8">
+        <div class="panel">
+          <h6>🔮 Predictive Insights & Recommendations</h6>
+          <div style="font-size:13px; line-height:1.8;">
+            <div style="background:#f9fafb; padding:12px; border-radius:6px; margin-bottom:12px;">
+              <strong>Next 90 Days Forecast:</strong><br/>
+              • Predicted provider exits: 2–3 providers (Somerset, Lancaster)
+
+              • Projected spend increase: +$2.1M (seasonal+rate trend)
+
+              • Estimated adequacy drop: −2.4% if no action
+/
+            </div>
+            <div style="background:#fffbeb; padding:12px; border-radius:6px; margin-bottom:12px;">
+              <strong>🎯 Recommended Actions (Priority Order):</strong><br/>
+              1. <strong>Proactive Recruitment:</strong> Somerset Cardiologist (prevent exit risk, +2 months lead time)
+
+              2. <strong>Contract Renegotiation:</strong> Allegheny Cardio (staged −4% reduction, staged over 2Q)
+
+              3. <strong>Telehealth Expansion:</strong> Harford (reduces access distance, addresses denial spike)
+
+            </div>
+          </div>
+          <button id="ai-run-forecast" class="btn btn-primary btn-compact">Run Full Forecast Model</button>
+          <button id="ai-export-insights" class="btn btn-outline-secondary btn-compact">Export AI Report</button>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel">
+          <h6>📊 Model Performance</h6>
+          <div style="font-size:13px; margin-top:12px;">
+            <div style="margin-bottom:12px;">
+              <div class="small-muted">Risk Score Accuracy</div>
+              <div style="font-weight:700; font-size:18px;">89.2%</div>
+              <div class="progress mt-2 mb-2"><div class="progress-bar" role="progressbar" style="width:89.2%"></div></div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div class="small-muted">Anomaly Precision</div>
+              <div style="font-weight:700; font-size:18px;">92.5%</div>
+              <div class="progress mt-2 mb-2"><div class="progress-bar bg-success" role="progressbar" style="width:92.5%"></div></div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div class="small-muted">Forecast Confidence</div>
+              <div style="font-weight:700; font-size:18px;">84.7%</div>
+              <div class="progress mt-2 mb-2"><div class="progress-bar bg-warning" role="progressbar" style="width:84.7%"></div></div>
+            </div>
+          </div>
+          <button id="ai-model-info" class="btn btn-outline-secondary btn-compact btn-sm mt-3" style="width:100%;">Model Info</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+    <div class="small-muted text-center mb-4">Prototype (synthetic data) — HiLabs 2025 • No PHI • Last updated: Nov 2025</div>
   </div>
 
   <!-- modal for negotiation brief -->
@@ -313,14 +352,13 @@
     </div>
   </div>
 
-  <!-- libs (added leaflet.heat for heatmap) -->
+  <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.24.0/plotly.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
 
   <script>
-    // --- original synthetic county + provider data (kept) ---
+    // synthetic county + provider data
     const counties = [
       {id:'Allegheny', lat:40.44, lon:-79.98, adequacy:87, pop:1250, suggest:"Add 2 PCPs"},
       {id:'Somerset', lat:40.02, lon:-79.08, adequacy:82, pop:45, suggest:"Recruit 1 Cardiologist"},
@@ -338,6 +376,7 @@
       {name:"Lancaster Surgical", spec:"General Surgery", county:"Lancaster", diff:7, load:150, risk:"Moderate"}
     ];
 
+    // network metric presets (used when Type / Coverage change)
     const networkVariants = {
       "Health|Standard": {spend:82.4, leakage:3.4, pos:"+5.8%", providers:1245},
       "Health|Premium": {spend:95.2, leakage:5.1, pos:"+7.6%", providers:1480},
@@ -346,51 +385,41 @@
       "Auto|Standard": {spend:28.6, leakage:0.6, pos:"+1.8%", providers:540}
     };
 
-    // --- initialize map with heat overlay ---
+    // initialize map
     const map = L.map('map',{zoomControl:true, scrollWheelZoom:false}).setView([40.0,-78.0],7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
 
-    // legend inside map
+    // add legend into map container (leaflet controls would be alternative)
     const legend = document.createElement('div');
     legend.className = 'map-legend';
     legend.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Coverage Legend</div>
       <div class="legend-row"><span class="sw" style="background:#10b981"></span><div>Green: ≥95% (Compliant)</div></div>
       <div class="legend-row"><span class="sw" style="background:#f59e0b"></span><div>Yellow: 90–95% (At Risk)</div></div>
       <div class="legend-row"><span class="sw" style="background:#ef4444"></span><div>Red: &lt;90% (Non-compliant)</div></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:6px">Colors = adequacy %</div>`;
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">Colors = % above/below market median / adequacy</div>`;
     document.getElementById('map').appendChild(legend);
 
-    let markerLayer = L.layerGroup().addTo(map);
-    let heatLayer = null;
-
-    function buildHeatPoints(){
-      // Use county adequacy inversely as intensity (lower adequacy -> hotter)
-      const raw = counties.map(c => ({lat:c.lat, lng:c.lon, score: Math.max(0, 100 - c.adequacy) * (c.pop/100)}));
-      const maxScore = Math.max(...raw.map(r=>r.score), 1);
-      return raw.map(r => [r.lat, r.lng, Math.min(1, r.score / maxScore)]);
-    }
-
-    function drawCountiesHeat(){
-      markerLayer.clearLayers();
-      if(heatLayer){ map.removeLayer(heatLayer); heatLayer = null; }
-      const heatPoints = buildHeatPoints();
-      heatLayer = L.heatLayer(heatPoints, {radius: 30, blur: 25, maxZoom: 12, gradient:{0.2:'blue',0.5:'orange',0.9:'red'}}).addTo(map);
-
+    let markers = [];
+    function drawCounties(){
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
       counties.forEach(c=>{
         const color = c.adequacy >=95 ? '#10b981' : (c.adequacy >=90 ? '#f59e0b' : '#ef4444');
-        const marker = L.circleMarker([c.lat,c.lon],{radius:8, fillColor:color, color:'#071227', weight:1, fillOpacity:0.95}).addTo(markerLayer);
+        const marker = L.circleMarker([c.lat,c.lon],{radius:11, fillColor:color, color:'#071227', weight:1.2, fillOpacity:0.95}).addTo(map);
         marker.bindTooltip(`<strong>${c.id}</strong><br>Adequacy: ${c.adequacy}%<br>Pop(k): ${c.pop}<br>Action: ${c.suggest}`);
         marker.on('click', ()=> {
           document.getElementById('provider-search').value = c.id;
           applyProviderFilter();
-          appendChat('assistant', `Filtered to ${c.id} — suggestion: ${c.suggest}`);
+          document.getElementById('provider-tbody').scrollIntoView({behavior:'smooth'});
         });
+        markers.push(marker);
       });
-      setTimeout(()=> map.invalidateSize(), 120);
+      // ensure map redraws properly after DOM changes
+      setTimeout(()=> map.invalidateSize(), 200);
     }
-    drawCountiesHeat();
+    drawCounties();
 
-    // --- provider table rendering & brief modal (kept) ---
+    // populate provider table
     function renderProviders(list){
       const tbody = document.getElementById('provider-tbody');
       tbody.innerHTML = '';
@@ -403,6 +432,21 @@
     }
     renderProviders(providers);
 
+    // basic trend plot
+    function renderTrend(){
+      const months=['Mar','Apr','May','Jun','Jul','Aug','Sep'];
+      const budget=[12,11.5,11.8,12.2,12,11.9,12.5];
+      const actual=[12.4,11.8,12.5,13.2,12.6,12.3,12.9];
+      const rate=[4.2,4.6,5.0,5.1,5.4,5.6,5.8];
+      const t1={x:months,y:budget,name:'Budget ($M)',type:'bar',marker:{color:'#cfe1ff'}};
+      const t2={x:months,y:actual,name:'Actual ($M)',type:'bar',marker:{color:'#2c6aef'}};
+      const t3={x:months,y:rate,name:'Rate Variance (%)',yaxis:'y2',mode:'lines+markers',marker:{color:'#f59e0b'},line:{width:3}};
+      const layout={margin:{t:20,l:40,r:40,b:50},yaxis:{title:'$M'},yaxis2:{title:'Rate %',overlaying:'y',side:'right'},legend:{orientation:'h',y:-0.18}};
+      Plotly.newPlot('trend-plot',[t1,t2,t3],layout,{displayModeBar:false,responsive:true});
+    }
+    renderTrend();
+
+    // negotiation brief modal
     const briefModal = new bootstrap.Modal(document.getElementById('briefModal'));
     function openBrief(p){
       document.getElementById('briefTitle').innerText = p.name + " — Negotiation Brief";
@@ -417,13 +461,13 @@
         `Recommendation: Consider targeted renegotiation. Suggested approach: staged reduction (start -4%), monitor acceptance. If provider exits, recruit replacement in county.`,
         ``,
         `Estimated regional impact: $${(p.diff*0.05).toFixed(2)}M`,
-        `Model rationale: Overpayment driven by provider concentration (HHI 0.62) and historical rate trend.`
+        `Model rationale: Overpayment driven by provider concentration (HHI 0.62) and historical rate trend (+12% YoY).`
       ].join("\n");
       document.getElementById('briefPre').innerText = text;
       briefModal.show();
     }
 
-    // --- filtering logic (kept) ---
+    // filtering logic
     function applyProviderFilter(){
       const q = document.getElementById('provider-search').value.trim().toLowerCase();
       const spec = document.getElementById('specialty-filter').value;
@@ -437,21 +481,7 @@
     document.getElementById('apply-filter').addEventListener('click', applyProviderFilter);
     document.getElementById('provider-search').addEventListener('keydown', e=>{ if(e.key==='Enter') applyProviderFilter(); });
 
-    // --- trends (kept, slightly reduced height) ---
-    function renderTrend(){
-      const months=['Mar','Apr','May','Jun','Jul','Aug','Sep'];
-      const budget=[12,11.5,11.8,12.2,12,11.9,12.5];
-      const actual=[12.4,11.8,12.5,13.2,12.6,12.3,12.9];
-      const rate=[4.2,4.6,5.0,5.1,5.4,5.6,5.8];
-      const t1={x:months,y:budget,name:'Budget ($M)',type:'bar',marker:{color:'#cfe1ff'}};
-      const t2={x:months,y:actual,name:'Actual ($M)',type:'bar',marker:{color:'#2c6aef'}};
-      const t3={x:months,y:rate,name:'Rate Variance (%)',yaxis:'y2',mode:'lines+markers',marker:{color:'#f59e0b'},line:{width:3}};
-      const layout={margin:{t:12,l:40,r:40,b:40},yaxis:{title:'$M'},yaxis2:{title:'Rate %',overlaying:'y',side:'right'},legend:{orientation:'h',y:-0.18}};
-      Plotly.newPlot('trend-plot',[t1,t2,t3],layout,{displayModeBar:false,responsive:true});
-    }
-    renderTrend();
-
-    // --- KPI refresh & UI wiring (kept & tightened) ---
+    // KPI refresh logic tied to filters
     function updateKPIs(){
       const type = document.getElementById('type-filter').value;
       const coverage = document.getElementById('coverage-filter').value;
@@ -464,6 +494,7 @@
       document.getElementById('kpi-savings').innerText = `$${v.leakage}M`;
       document.getElementById('active-providers').innerText = v.providers.toLocaleString();
 
+      // adequacy change heuristic: better coverage -> +1 or -1
       const baseAdequacy = Math.round(counties.reduce((s,c)=>s+c.adequacy,0)/counties.length);
       const adj = (coverage==='Premium'?1:coverage==='Basic'?-2:0);
       const adequacy = Math.max(78, Math.min(98, baseAdequacy + adj));
@@ -471,127 +502,65 @@
       document.getElementById('goal-progress').style.width = adequacy + '%';
       document.getElementById('goal-progress').innerText = adequacy + '%';
 
-      document.getElementById('action-list').innerHTML = counties.filter(c=>c.adequacy<95).map(c=>`<li>${c.id} — ${c.suggest}</li>`).join('') || '<li>None</li>';
+      // update actions list
+      const actions = counties.filter(c=>c.adequacy<95).map(c=>`<li>${c.id} — ${c.suggest}</li>`).join('');
+      document.getElementById('action-list').innerHTML = actions || '<li>None</li>';
+
+      // update small numbers
       document.getElementById('below-counties').innerText = counties.filter(c=>c.adequacy<90).length;
       document.getElementById('avg-dist').innerText = (12.5 + (coverage==='Premium'?-1:coverage==='Basic'?1.5:0)).toFixed(1) + " miles";
       document.getElementById('util').innerText = (89 + (coverage==='Premium'?1:-1)) + '%';
     }
 
+    // refresh button: randomize slightly to demonstrate interactive updates
     document.getElementById('refresh-btn').addEventListener('click', ()=>{
       counties.forEach(c=> c.adequacy = Math.max(78, Math.min(98, Math.round(c.adequacy + (Math.random()*5-2)))));
-      drawCountiesHeat();
+      drawCounties();
       updateKPIs();
       renderProviders(providers);
       renderTrend();
     });
+
+    // export stub
     document.getElementById('export-btn').addEventListener('click', ()=> alert('Export stub — implement html2canvas or server export in production.'));
+
+    // audit + report stubs
     document.getElementById('run-audit').addEventListener('click', ()=> alert('Adequacy audit triggered (demo).'));
     document.getElementById('download-report').addEventListener('click', ()=> alert('Download stub — gap report (demo).'));
+
+    // update filter handlers
     document.getElementById('type-filter').addEventListener('change', updateKPIs);
     document.getElementById('coverage-filter').addEventListener('change', updateKPIs);
     document.getElementById('date-range').addEventListener('change', updateKPIs);
 
-    // --- AI features: Insights, Chat, Predictor, Quick Scan ---
-    const insightsEl = document.getElementById('insights-feed');
-    const syntheticInsights = [
-      {title:'Coding audit finds upcoding signals', src:'HiLabs AI', time:'3h ago', summary:'Preliminary audit suggests coding variance in Allegheny leading to ~3% inflation.'},
-      {title:'Telehealth increases access', src:'Domain Monitor', time:'7h ago', summary:'Expanding telehealth in rural counties reduced access gap by 9% in pilots.'},
-      {title:'Specialty consolidation raises rates', src:'HealthNews', time:'1d ago', summary:'Ortho market concentration correlated with +8% price premium.'}
-    ];
-    function renderInsights(items=syntheticInsights){ insightsEl.innerHTML=''; items.forEach(it=>{ const d=document.createElement('div'); d.style.padding='8px 6px'; d.style.borderBottom='1px solid #f1f6ff'; d.innerHTML=`<div style="font-weight:700">${it.title}</div><div style="font-size:12px;color:var(--muted)">${it.src} • ${it.time}</div><div style="margin-top:6px">${it.summary}</div>`; insightsEl.appendChild(d); }); }
-    renderInsights();
-
-    // compact chat (rule-based with optional LLM hook)
-    const chatBox = document.getElementById('chat-box');
-    function appendChat(role, text){
-      const row = document.createElement('div'); row.className='chat-row ' + (role==='user'?'chat-user':'chat-assistant');
-      row.innerHTML = `<div class="chat-bubble">${text}</div>`; chatBox.appendChild(row); chatBox.scrollTop = chatBox.scrollHeight;
-    }
-    function simpleChatReply(q){
-      const lq = q.toLowerCase();
-      if(lq.includes('highest') && lq.includes('risk')) {
-        // compute hottest county (by heat score)
-        const top = counties.slice().sort((a,b)=> (100-a.adequacy)*(a.pop/100) - (100-b.adequacy)*(b.pop/100))[0];
-        return `Highest risk county: ${top.id} — adequacy ${top.adequacy}%. Suggest: ${top.suggest}.`;
-      }
-      if(lq.includes('predict') || lq.includes('forecast')){
-        return `Use the small Predictor control to generate a 3-month linear forecast of a chosen metric.`;
-      }
-      if(lq.includes('specialty') || lq.includes('which specialty')){
-        return `Start with Primary Care or Cardiology depending on county — run targeted RFP in counties with adequacy < 92%.`;
-      }
-      return `I can answer: "Which county is highest risk", "Which specialty to target", or explain how to run a forecast. Try one of those.`;
-    }
-    document.getElementById('chat-send').addEventListener('click', ()=> {
-      const q = document.getElementById('chat-input').value.trim(); if(!q) return; document.getElementById('chat-input').value='';
-      appendChat('user', q); appendChat('assistant', 'Thinking...');
-      setTimeout(()=> {
-        const reply = simpleChatReply(q);
-        chatBox.lastChild.innerHTML = `<div class="chat-bubble">${reply}</div>`;
-      }, 300);
-    });
-    appendChat('assistant', 'Hi — HiLabs Assistant. Try: "Which county is highest risk?" or "Which specialty to target?"');
-
-    // Predictor: tiny client-side linear reg for demonstration
-    function linreg(xs, ys){
-      const n = xs.length; const mx = xs.reduce((a,b)=>a+b,0)/n; const my = ys.reduce((a,b)=>a+b,0)/n;
-      let num=0, den=0, ssTot=0, ssRes=0;
-      for(let i=0;i<n;i++){ num+=(xs[i]-mx)*(ys[i]-my); den+=(xs[i]-mx)*(xs[i]-mx); }
-      const slope = den===0?0:num/den; const intercept = my - slope*mx;
-      for(let i=0;i<n;i++){ ssTot += (ys[i]-my)*(ys[i]-my); ssRes += (ys[i] - (slope*xs[i]+intercept))**2; }
-      const r2 = ssTot===0?1:Math.max(0,1 - ssRes/ssTot);
-      return {slope, intercept, r2};
-    }
-
-    function synthMetricHistory(metric, months){
-      // small synthetic history per metric
-      const base = { adequacy:92, providers:1245, savings:3.4 };
-      const trend = { adequacy:-0.05, providers:2, savings:0.02 };
-      const arr=[]; for(let i=months-1;i>=0;i--){ const noise=(Math.random()-0.5)*(metric==='adequacy'?0.8: metric==='providers'?6:0.2); arr.push(Number((base[metric] + trend[metric]*i + noise).toFixed(2))); } return arr;
-    }
-
-    document.getElementById('pred-run').addEventListener('click', ()=>{
-      const metric = document.getElementById('pred-metric').value;
-      const months = Number(document.getElementById('pred-months').value) || 12;
-      const hist = synthMetricHistory(metric, months);
-      const xs = Array.from({length:months}, (_,i)=>i);
-      const model = linreg(xs, hist);
-      const preds = [months, months+1, months+2].map(x=> Number((model.slope*x + model.intercept).toFixed(2)));
-      document.getElementById('pred-summary').innerText = `Next 3-month: ${preds.join(', ')} (R² ${(model.r2*100).toFixed(0)}%)`;
+    // initial render
+    (function init(){
+      updateKPIs();
+      renderProviders(providers);
+    })();
+  
+    // AI Features Event Handlers
+    document.getElementById('ai-risk-details').addEventListener('click', ()=> {
+      const modal_text = `AI Risk Scoring Model\n\nMethod: Ensemble (Gradient Boosting + Isolation Forest)\nFeatures: rate_variance, concentration_hhi, member_load, denial_trend, exit_probability\n\nTop Risk Drivers (Allegheny Cardio):\n1. Rate Variance: +12% (contributes 40% to risk score)\n2. HHI Concentration: 0.62 (mid-high, contributes 30%)\n3. Member Load: 420 (high, contributes 20%)\n4. Denial Trend: stable (low risk, contributes 10%)\n\nModel trained on 18-month historical data. Retrains weekly.\nAccuracy on validation set: 89.2%`;
+      alert(modal_text);
     });
 
-    // Quick AI scan: inject contextual insight & chat entry
-    function runQuickScan(){
-      // pick hottest county metric: low adequacy * pop
-      const scored = counties.map(c=> ({...c, score: (100 - c.adequacy) * (c.pop/100)})).sort((a,b)=>b.score-a.score);
-      const top = scored[0];
-      const insight = { title: `QuickScan: ${top.id} flagged`, src:'HiLabs AI', time:'now', summary:`${top.id} has adequacy ${top.adequacy}%. Suggest: ${top.suggest}` };
-      renderInsights([insight, ...syntheticInsights]);
-      appendChat('assistant', `QuickScan complete: ${top.id} flagged. Insights panel updated.`);
-    }
-    document.getElementById('run-scan').addEventListener('click', runQuickScan);
-
-    // Refresh insights button
-    document.getElementById('refresh-insights').addEventListener('click', ()=> {
-      renderInsights();
-      appendChat('assistant', 'Insights refreshed.');
-    });
-    document.getElementById('export-insights').addEventListener('click', ()=> {
-      const nodes = Array.from(document.querySelectorAll('#insights-feed > div'));
-      const rows = nodes.map(n => {
-        const title = n.children[0].innerText;
-        const meta = n.children[1].innerText;
-        const summary = n.children[2].innerText;
-        return `"${title.replace(/"/g,'""')}","${meta.replace(/"/g,'""')}","${summary.replace(/"/g,'""')}"`;
-      });
-      const csv = 'title,meta,summary\n' + rows.join('\n');
-      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'insights.csv'; a.click(); a.remove(); URL.revokeObjectURL(url);
+    document.getElementById('ai-anomaly-config').addEventListener('click', ()=> {
+      const config = `Anomaly Detection Settings\n\nMethod: Isolation Forest + Z-score hybrid\nSensitivity: Medium (threshold: 2.5 sigma)\n\nMonitored Metrics:\n- Claim denial rate (baseline: 7.1%, alert: ±2.5%)\n- Provider member load (rolling avg, alert: ±30%)\n- Access distance (baseline: 12.5 miles, alert: >14 miles)\n- Rate variance (baseline: +5.8%, alert: >8% or <2%)\n\nUpdate frequency: Daily (00:00 UTC)\nRetention: 24 months rolling`;
+      alert(config);
     });
 
-    // small polishing: initial rendering & KPIs
-    (function init(){ updateKPIs(); renderProviders(providers); renderTrend(); })();
+    document.getElementById('ai-run-forecast').addEventListener('click', ()=> {
+      alert('Running 90-day forecast model...\n\nScenarios:\n1. Base case (no action): adequacy→91.6%, spend +$2.1M\n2. Proactive recruitment: adequacy→93.2%, spend +$1.8M\n3. Full intervention (recruitment + renegotiation): adequacy→95.1%, spend +$0.3M\n\nRecommended: Scenario 3 (ROI: 8.2x over 12 months)');
+    });
+
+    document.getElementById('ai-export-insights').addEventListener('click', ()=> {
+      alert('Exporting AI insights report (PDF)...\nIncludes: Risk scores, anomalies, forecast scenarios, recommendations, model diagnostics.');
+    });
+
+    document.getElementById('ai-model-info').addEventListener('click', ()=> {
+      const info = `Model Information\n\nName: HiLabs Risk & Adequacy Predictor v2.1\nLast Updated: 2025-11-08 03:45 UTC\nTraining Data: 18 months (500+ providers, 42 regions)\n\nComponent Models:\n- Risk Classifier: XGBoost (leaf_size=7, depth=6)\n- Anomaly Detector: Isolation Forest (contamination=0.08)\n- Demand Forecaster: LSTM + Prophet ensemble\n\nPerformance:\n- Risk AUC: 0.912 | F1: 0.88\n- Anomaly Precision: 92.5% | Recall: 87.1%\n- Forecast MAE: 3.2% on hold-out test set\n\nNext retraining: 2025-11-15`;
+      alert(info);
+    });
+  
   </script>
-</body>
-</html>
